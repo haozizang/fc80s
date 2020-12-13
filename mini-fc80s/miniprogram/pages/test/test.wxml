@@ -1,0 +1,4 @@
+<button open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">BUTTON</button>
+
+<open-data type="userAvatarUrl"></open-data>
+<open-data type="userNickName" lang="zh_CN"></open-data>

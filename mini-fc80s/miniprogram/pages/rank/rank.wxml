@@ -1,0 +1,68 @@
+<!--pages/rank/rank.wxml-->
+<view class="general">
+
+  <!-- 顶部固定部分 -->
+  <view class="topFixed" id="topFixed">
+    <!-- 添加球队输入框 -->
+    <view class="addTeam">
+      <image class="plus" src="../../images/plus.png"/>
+      <input value="{{ input }}" placeholder="Add a team..." auto-focus bindinput="inputChangeHandle" bindconfirm="addTodoHandle"/>
+    </view>
+
+    <!-- 积分榜标题 -->
+    <view class="titleGroup">
+      <view class="titleTeam">team</view>
+      <view class="title">game</view>
+      <view class="title">win</view>
+      <view class="title">draw</view>
+      <view class="title">loss</view>
+      <view class="title">goal</view>
+      <view class="title">pts</view>
+      <view class="title">del</view>
+    </view>
+
+    <!-- 积分榜内容 -->
+    <block wx:for="{{teams}}" wx:for-item="item" wx:key="index">
+      <view class="contentGroup">
+        <view class="contentTeam">{{item.leader}}</view>
+        <view class="content">{{item.game}}</view>
+        <view class="content">{{item.win}}</view>
+        <view class="content">{{item.draw}}</view>
+        <view class="content">{{item.loss}}</view>
+        <view class="content">{{item.goal}}</view>
+        <view class="content">{{item.point}}</view>
+        <view class="content" data-index="{{index}}" bindtap="deleteTeam"><image class="plus" src="../../images/subtract.png"/></view>
+      </view>
+    </block>
+    <view class="btnBox" style="auto">
+      <!-- 开始按钮 -->
+      <image class="start" src="../../images/start1.png" bindtap="startAddMatch" />
+      <!-- 删除缓存 -->
+      <image class="reset" src="../../images/reset1.png" bindtap="resetStorage" />  
+    </view>
+  </view>    <!-- 顶部固定部分结束 -->
+
+  <!-- <view class="placeholder">
+  </view> -->
+
+  <!-- 对战表 -使用两个block:解包matches=[ [{}] ]: 内层列表表示一轮比赛,使用内层block实现 -->
+  <view class="matches" style="padding-top: {{fixedHeight}}px;">
+    <block wx:if="{{ matches }}">
+      <view class="roundBox" wx:for="{{ matches }}"  bindtap="tapLscoreChange" wx:for-item="item" wx:key="index" data-index="{{ index }}" >
+        <block wx:for="{{ item }}" wx:for-item="newItem" wx:key="index" >
+          <view class="versus">
+            <text class="homeTeam">{{newItem.home}}</text>
+            <view class="input">
+              <input type="number" value="{{ newItem.lScore }}" class="scoreInput" bindinput="inputScoreChange" bindconfirm="confirmScoreChange" data-index="{{ index + 1 }}" />
+              ー
+              <input type="number" value="{{ newItem.rScore }}" class="scoreInput"  bindinput="inputScoreChange" bindconfirm="confirmScoreChange" data-index="{{ -index - 1 }}" />
+            </view>
+            <text class="awayTeam">{{newItem.away}}</text>
+        <!-- 　　 {{newItem.away}} -->
+          </view>
+        </block>
+      </view>
+    </block>
+  </view>
+  
+</view>
