@@ -1,6 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from .models import Player
+from django.http import HttpResponse, Http404
+from django.template import loader
+
+from .models import Player, Match, Team
 
 def index(request):
     # turn hex kanji into string
@@ -13,18 +15,21 @@ def index(request):
     print("Method", request.method)
     # get all players
     player_list = Player.objects.all();
-    all_player_str = ""
-    for player in player_list:
-        all_player_str += "name: " + player.name + "<br>"
-        all_player_str += "offence: " + str(player.offence) + "<br>"
-        all_player_str += "defence: " + str(player.defence) +  "<br>"
-    return HttpResponse(all_player_str)
+    # loader is old-fashioned
+    context = {
+        'player_list': player_list
+    }
+    return render(request, "index/index.html", context)
 
-def detail(request, detail_id):
-    return HttpResponse("You're looking at detail %s." % detail_id)
+def match(request, match_id):
+    try:
+        match = Match.objects.get(pk=match_id)
+    except Match.DoesNotExist:
+        raise Http404("match not found")
+    return HttpResponse("You're looking at match %s." % match_id)
 
-def question(request, detail_id):
-    return HttpResponse("You're looking at question %s." % detail_id)
+def team(request, team_id):
+    return HttpResponse("You're looking at team %s." % team_id)
 
-def result(request, detail_id):
-    return HttpResponse("You're looking at result %s." % detail_id)
+def player(request, player_id):
+    return HttpResponse("You're looking at player %s." % player_id)
