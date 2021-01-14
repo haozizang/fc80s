@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+
+<body>
+    <h4>球员: {{ player.name }}</h4>
+{% if team_list %}
+    Activities
+    <table border="1">
+        <tr>
+            <td>DATE</td>
+            <td>TEAM</td>
+        </tr>
+    {% for team in team_list %}
+        <tr>
+            <td> {{ team.time.date }} </td>
+            <td> <a href="{% url 'team' team.id %}"> {{ team.name }} </a></td>
+        </tr>
+    {% endfor %}
+{% else %}
+    <p>No content available.</p>
+{% endif %}
+</body>
+</html>

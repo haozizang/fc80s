@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.template import loader
+from django.db.models import Q
 
 from .models import Player, Match, Team
 
@@ -29,7 +30,19 @@ def match(request, match_id):
     return HttpResponse("You're looking at match %s." % match_id)
 
 def team(request, team_id):
-    return HttpResponse("You're looking at team %s." % team_id)
+    team = Team.objects.get(id=team_id)
+    match_list = Match.objects.filter(Q(home_team__id=team_id) | Q(away_team__id=team_id))
+    context = {
+        'team': team,
+        'match_list': match_list
+    }
+    return render(request, "index/team.html", context)
 
 def player(request, player_id):
-    return HttpResponse("You're looking at player %s." % player_id)
+    player = Player.objects.get(id=player_id)
+    team_list = Team.objects.filter(players__id=player_id)
+    context = {
+        'player': player,
+        'team_list': team_list
+    }
+    return render(request, "index/player.html", context)

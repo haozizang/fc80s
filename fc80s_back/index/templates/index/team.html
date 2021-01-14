@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+</head>
+
+<body>
+    <h4>时间: {{ team.time }}</h4>
+    <h4>球队: {{ team.name }}</h4>
+{% if match_list %}
+    Members 
+    {% for match in match_list %}
+    <ul>
+        <li> {{ match.home_team.name }} {{ match.home_goals }} : {{ match.away_goals }} {{ match.away_team.name }} </li>
+    </ul>
+    {% endfor %}
+{% else %}
+    <p>No content available.</p>
+{% endif %}
+</body>
+</html>

@@ -7,7 +7,6 @@ from django.db import models
 # player
 class Player(models.Model):
     # openID -> id
-    player_id = models.IntegerField(default=0)
     name = models.CharField(max_length=30)
     offence = models.IntegerField(default=0)
     defence = models.IntegerField(default=0)
@@ -25,12 +24,13 @@ class Player(models.Model):
 
 class Team(models.Model):
     name = models.CharField(max_length=30)
-    win = models.IntegerField(default=0)
-    draw = models.IntegerField(default=0)
-    loss = models.IntegerField(default=0)
-    # 添加GS(goal scored), GA(goal against) -> 算出 GD(goal difference)
+    captain = models.ForeignKey(Player, related_name="captain", on_delete=models.CASCADE)
     time = models.DateTimeField()
     players = models.ManyToManyField(Player)
+    # win = models.IntegerField(default=0)
+    # draw = models.IntegerField(default=0)
+    # loss = models.IntegerField(default=0)
+    # 添加GS(goal scored), GA(goal against) -> 算出 GD(goal difference)
 
     def __str__(self):
         return self.name
@@ -45,4 +45,4 @@ class Match(models.Model):
     time = models.DateTimeField()
 
     def __str__(self):
-        return "home: " + self.home_team.name + " VS " + "away: " + self.away_team.name
+        return self.home_team.name + str(self.home_goals) + " : " + str(self.away_goals) + self.away_team.name
