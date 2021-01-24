@@ -3,7 +3,7 @@
  */
 const app = getApp();
 
-// 雷达图的变量
+// 雷达图的图形尺寸
 var numCount = 6;
 var numSlot = 5;
 var mW = 400;
@@ -17,12 +17,51 @@ var radCtx = wx.createCanvasContext("radarCanvas")
 
 Page({
     data: {
+        canIUse: wx.canIUse('button.open-type.getUserInfo'),
         isLogin: app.globalData.isLogin,
-        openid: ''
+        openid: '',
+        stepText:5,
+        abilityArray1: [["稳定", 88], ["防守", 30], ["热情", 66], ["荣誉", 90],[ "进攻", 95], ["胜率", 88]],
+        abilityArray2: [["稳定", 24], ["防守", 60], ["热情", 88], ["荣誉", 49], ["进攻", 46], ["胜率", 92]]
     },
 
     // onLoad 小程序启动时调用
     onLoad: function() {
+        // if userInfo 已授权, 则直接加载
+        this.ifGotUserInfo();
+        // 使用 openid 获取 player 综合信息=> 六边形数据等
+        this.getPlayerInfo();
+    },
+
+    ifGotUserInfo() {
+        var that = this;
+        // getSetting 返回 权限设置
+        wx.getSetting({
+            success (res){
+                if (res.authSetting['scope.userInfo']) {
+                // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+                wx.getUserInfo({
+                    success: function(res) {
+                    console.log(res.userInfo)
+                    that.setData({
+                        isLogin: true,
+                        nickName: res.userInfo.nickName,
+                        avatarUrl: res.userInfo.avatarUrl,
+                    })
+                    app.globalData.isLogin = true;
+                    }
+                })
+                }else{
+                    // 未授权，调成false=> 引导登陆
+                    that.setData({
+                        isLogin: false,
+                    })
+                }
+            }
+        })
+    },
+
+    getPlayerInfo() {
         var that = this;
         // 获取，保存 openid
         // 云函数调用为异步
@@ -32,6 +71,7 @@ Page({
                 console.log(res.result.openid)
                 var local_openid = res.result.openid
                 console.log('result:', res.result)
+                // 弹出提示框
                 wx.showModal({
                     title: '提示',
                     content: local_openid
@@ -54,6 +94,18 @@ Page({
                     }
                 })
             },
+        })
+    },
+
+    // 用户授权登陆后, 更新页面的函数
+    onGotUserInfo (res) {
+        // 查看是否授权
+        console.log(res.detail.userInfo)
+        var that = this;
+        that.setData({
+        isLogin: true,
+        nickName: res.detail.userInfo.nickName,
+        avatarUrl: res.detail.userInfo.avatarUrl,
         })
     },
 
@@ -94,13 +146,6 @@ Page({
         }
     },
 
-    // 全局变量？
-    data: {
-        stepText:5,
-        chanelArray1: [["稳定", 88], ["防守", 30], ["热情", 66], ["荣誉", 90],[ "进攻", 95], ["胜率", 88]],
-        chanelArray2: [["稳定", 24], ["防守", 60], ["热情", 88], ["荣誉", 49], ["进攻", 46], ["胜率", 92]]
-    },
-
 
     onReady: function () {
         this.drawRadar()
@@ -111,8 +156,8 @@ Page({
     坐标旋转规则：+x轴为0， 顺时针为角度加
     */
     drawRadar: function() {
-        var sourceData1 = this.data.chanelArray1
-        var sourceData2 = this.data.chanelArray2
+        var sourceData1 = this.data.abilityArray1
+        var sourceData2 = this.data.abilityArray2
 
         //调用
         this.drawEdge() //画六边形
@@ -223,7 +268,5 @@ Page({
            radCtx.fillStyle = color;
            radCtx.fill();
          }
- 
     }
-
 })
