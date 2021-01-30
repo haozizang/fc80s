@@ -153,12 +153,13 @@ Page({
 
   // 将storage中的数据清空并更新到当前数据中
   resetStorage:function() {
-    wx.removeStorageSync("data")
     this.setData({
-        teams: [],
-        orderedTeams: [],
-        matches: []
+      teams: [],
+      orderedTeams: [],
+      matches: []
     })
+    // wx.removeStorageSync("data")
+    wx.clearStorageSync()
   },
 
   // 点击输入框时获取该输入框的序号
