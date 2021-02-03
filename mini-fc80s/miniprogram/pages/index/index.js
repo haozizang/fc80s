@@ -20,20 +20,21 @@ Page({
         canIUse: wx.canIUse('button.open-type.getUserInfo'),
         isLogin: app.globalData.isLogin,
         openid: '',
-        stepText:5,
-        abilityArray1: [["稳定", 88], ["防守", 30], ["热情", 66], ["荣誉", 90],[ "进攻", 95], ["胜率", 88]],
-        abilityArray2: [["稳定", 24], ["防守", 60], ["热情", 88], ["荣誉", 49], ["进攻", 46], ["胜率", 92]]
+        nickName: '',
+        avatarUrl: '',
+        activities: 0,
+        matches: 0,
+        abilityArray1: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0],[ "进攻", 0], ["胜率", 0]],
+        // abilityArray2: [["稳定", 24], ["防守", 60], ["热情", 88], ["荣誉", 49], ["进攻", 46], ["胜率", 92]]
     },
 
     // onLoad 小程序启动时调用
     onLoad: function() {
         // if userInfo 已授权, 则直接加载
-        this.ifGotUserInfo();
-        // 使用 openid 获取 player 综合信息=> 六边形数据等
-        this.getPlayerInfo();
+        this.getUserInfo();
     },
 
-    ifGotUserInfo() {
+    getUserInfo() {
         var that = this;
         // getSetting 返回 权限设置
         wx.getSetting({
@@ -48,7 +49,10 @@ Page({
                         nickName: res.userInfo.nickName,
                         avatarUrl: res.userInfo.avatarUrl,
                     })
+                    that.getOpenId();
+
                     app.globalData.isLogin = true;
+                    console.log("name:", that.data.nickName)
                     }
                 })
                 }else{
@@ -61,7 +65,7 @@ Page({
         })
     },
 
-    getPlayerInfo() {
+    getOpenId() {
         var that = this;
         // 获取，保存 openid
         // 云函数调用为异步
@@ -83,14 +87,20 @@ Page({
                 // 与后端交互
                 wx.request({
                     url: 'http://127.0.0.1:8000/index/',
-                    header: { "content-type": "application/x-www-form-urlencoded" },
+                    header: { "content-type": "application/json" },
                     method: "POST",
-                    data: {openid: local_openid},
-                    header: {
-                        'content-type': 'application/json'
+                    data: {
+                        open_id: local_openid,
+                        nick_name: that.data.nickName
                     },
                     success: function (res) {
                         console.log(res.data)
+                        that.setData({
+                            matches: res.data.matches,
+                            activities: res.data.activities,
+                            abilityArray1: [["稳定", res.data.stability], ["防守", res.data.defence], ["热情", res.data.passion], ["荣誉", res.data.teamwork],[ "进攻", res.data.offence], ["胜率", res.data.win_ratio]]
+                        })
+                        that.drawRadar()
                     }
                 })
             },
@@ -111,6 +121,7 @@ Page({
 
     // onShow 每次页面切换时调用
     onShow: function () {
+
     },
 
 
@@ -148,7 +159,7 @@ Page({
 
 
     onReady: function () {
-        this.drawRadar()
+        // this.drawRadar()
     },
     
     // 雷达图
@@ -157,7 +168,7 @@ Page({
     */
     drawRadar: function() {
         var sourceData1 = this.data.abilityArray1
-        var sourceData2 = this.data.abilityArray2
+        // var sourceData2 = this.data.abilityArray2
 
         //调用
         this.drawEdge() //画六边形
@@ -165,12 +176,12 @@ Page({
         this.drawLinePoint()
         //设置数据
         this.drawRegion(sourceData1,'rgba(255, 0, 0, 0.5)') //第一个人的
-        this.drawRegion(sourceData2, 'rgba(255, 200, 0, 0.5)') //第二个人
+        // this.drawRegion(sourceData2, 'rgba(255, 200, 0, 0.5)') //第二个人
         //设置文本数据
         this.drawTextCans(sourceData1)
         //设置节点
         this.drawCircle(sourceData1,'red')
-        this.drawCircle(sourceData2,'yellow')
+        // this.drawCircle(sourceData2,'yellow')
         //开始绘制
         radCtx.draw()
     },
