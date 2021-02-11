@@ -16,21 +16,26 @@ def index(request):
     print("Method", request.method)
     # get or create the player for the sender
     player, if_created = Player.objects.get_or_create(open_id=body["open_id"], defaults={'name': body["nick_name"], 'open_id': body["open_id"]})
-    # get all the team(activity) the sender get involved
-    team_list = Team.objects.filter(players__open_id=body["open_id"])
-    team_num = team_list.count()
-    print("team num(activity num): ", team_list.count())
-    # get all the matches the sender's in
+    print("player.name: ", player.name)
+    print("if created: ", if_created)
     match_num = 0
-    for team in team_list:
-        print('team name: ', team.name)
-        home_match_list = Match.objects.filter(home_team__id=team.id)
-        away_match_list = Match.objects.filter(away_team__id=team.id)
-        print("home match num: ", home_match_list.count())
-        print("away match num: ", away_match_list.count())
-        match_num += home_match_list.count()
-        match_num += away_match_list.count()
-        print("match count: ", match_num)
+    team_num = 0
+    if not if_created:
+        # not new user => check team and match
+        # get all the team(activity) the sender get involved
+        team_list = Team.objects.filter(players__open_id=body["open_id"])
+        team_num = team_list.count()
+        # get all the matches the sender's in
+        for team in team_list:
+            print('team name: ', team.name)
+            home_match_list = Match.objects.filter(home_team__id=team.id)
+            away_match_list = Match.objects.filter(away_team__id=team.id)
+            print("home match num: ", home_match_list.count())
+            print("away match num: ", away_match_list.count())
+            match_num += home_match_list.count()
+            match_num += away_match_list.count()
+    print("match count: ", match_num)
+    print("team num(activity num): ", team_list.count())
     resp = {
         'activities': team_num,
         'matches': match_num,
@@ -40,9 +45,7 @@ def index(request):
         'teamwork': player.teamwork,
         'passion': player.passion,
         'win_ratio': player.win_ratio
-        }
-    print("player.name: ", player.name)
-    print("if created: ", if_created)
+    }
     # return render(request, "index/index.html", context)
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
