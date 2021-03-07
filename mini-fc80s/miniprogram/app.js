@@ -34,14 +34,4 @@ App({
     getRealName: function (res) {
 
     }
-
-    // 获取授权信息；scope.userInfo 接口已废弃
-    // getAuthSetting: function (res) {
-    //     if (!res.authSetting['scope.userInfo']) {
-    //         // 没有授权
-    //         this.globalData.isLogin = false;
-    //     } else {
-    //         this.globalData.isLogin = true;
-    //     }
-    // },
 })
