@@ -25,7 +25,6 @@ Page({
         activities: 0,
         matches: 0,
         abilityArray1: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0],[ "进攻", 0], ["胜率", 0]],
-        // abilityArray2: [["稳定", 24], ["防守", 60], ["热情", 88], ["荣誉", 49], ["进攻", 46], ["胜率", 92]]
     },
 
     // onLoad 小程序启动时调用
@@ -40,25 +39,20 @@ Page({
         wx.getSetting({
             success (res){
                 if (res.authSetting['scope.userInfo']) {
-                // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-                wx.getUserInfo({
-                    success: function(res) {
-                    console.log(res.userInfo)
-                    that.setData({
-                        isLogin: true,
-                        nickName: res.userInfo.nickName,
-                        avatarUrl: res.userInfo.avatarUrl,
-                    })
-                    that.getOpenId();
+                    // 已经授权，可以直接调用 getUserInfo 获取头像昵称
+                    wx.getUserInfo({
+                        success: function(res) {
+                        console.log(res.userInfo)
+                        that.setData({
+                            isLogin: true,
+                            nickName: res.userInfo.nickName,
+                            avatarUrl: res.userInfo.avatarUrl,
+                        })
+                        that.getOpenId();
 
-                    app.globalData.isLogin = true;
-                    console.log("name:", that.data.nickName)
-                    }
-                })
-                }else{
-                    // 未授权，调成false=> 引导登陆
-                    that.setData({
-                        isLogin: false,
+                        app.globalData.isLogin = true;
+                        console.log("name:", that.data.nickName)
+                        }
                     })
                 }
             }
@@ -117,13 +111,16 @@ Page({
         nickName: res.detail.userInfo.nickName,
         avatarUrl: res.detail.userInfo.avatarUrl,
         })
+        app.globalData.isLogin = true;
+        this.getUserInfo();
     },
 
     // onShow 每次页面切换时调用
     onShow: function () {
-
+        console.log(this.data.isLogin)
+        console.log(app.globalData.isLogin)
+        this.getUserInfo();
     },
-
 
     /**
      * 用户点击右上角分享

@@ -21,13 +21,13 @@
     </view>
 
     <div class="weui-flex">
-    <div class="weui-flex__item"><div class="placeholder">活动: {{ activities }}</div></div>
-    <div class="weui-flex__item"><div class="placeholder">比赛: {{ matches }}</div></div>
-</div>
+        <div class="weui-flex__item"><div class="placeholder">活动: {{ activities }}</div></div>
+        <div class="weui-flex__item"><div class="placeholder">比赛: {{ matches }}</div></div>
+    </div>
 
     <!-- radar chart -->
     <view class='radarContainer'>
-    <canvas class='radarCanvas' canvas-id='radarCanvas'></canvas>
+        <canvas class='radarCanvas' canvas-id='radarCanvas'></canvas>
     </view>
 
 </view>    <!-- end of wx:if-->
