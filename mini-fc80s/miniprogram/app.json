@@ -5,7 +5,8 @@
     "pages/detail/detail",
     "pages/post/post",
     "pages/apply/apply",
-    "pages/rank/rank"
+    "pages/rank/rank",
+    "pages/activity/activity"
   ],
   "window": {
     "backgroundColor": "#353535",
@@ -29,12 +30,11 @@
         "selectedIconPath": "images/rank_selected.png"
       },
       {
-        "pagePath": "pages/test/test",
+        "pagePath": "pages/activity/activity",
         "text": "test",
         "iconPath": "images/rank.png",
         "selectedIconPath": "images/rank_selected.png"
       }
-
     ]
   },
   "sitemapLocation": "sitemap.json"
