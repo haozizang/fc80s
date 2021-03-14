@@ -37,8 +37,11 @@
     <view class="btnBox" style="auto">
       <!-- 开始按钮 -->
       <image class="start" src="../../images/start1.png" bindtap="startAddMatch" />
+      <!-- 比分上传 -->
+      <image class="register" src="../../images/register.png" bindtap="uploadMatch" />
       <!-- 删除缓存 -->
-      <image class="reset" src="../../images/reset1.png" bindtap="resetStorage" />  
+      <image class="reset" src="../../images/reset1.png" bindtap="resetStorage" />
+
     </view>
   </view>    <!-- 顶部固定部分结束 -->
 

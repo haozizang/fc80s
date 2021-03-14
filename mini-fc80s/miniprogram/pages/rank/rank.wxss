@@ -107,21 +107,28 @@
 
 /* 按键行 */
 .start {
-  width: 150rpx;
+  width: 100rpx;
   height: 60rpx;
   display: flex;
   justify-content: center;
-  padding-right: 200rpx;
+  padding-right: 150rpx;
 }
 
 .reset {
-  width: 150rpx;
+  width: 100rpx;
   height: 60rpx;
   display: flex;
   justify-content: center;
-  padding-left: 200rpx;
+  padding-left: 150rpx;
 }
 
+.register {
+  width: 100rpx;
+  height: 60rpx;
+  display: flex;
+  justify-content: center;
+  /* padding-left: 150rpx; */
+}
 
 /* 对战表的格式 */
 .matches {

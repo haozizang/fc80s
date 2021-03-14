@@ -162,6 +162,24 @@ Page({
     wx.clearStorageSync()
   },
 
+  uploadMatch: function() {
+    var teams = this.data.teams;
+    // var matches = this.data.matches;
+    wx.request({
+      url: 'http://127.0.0.1:8000/rank/upload/',
+      header: { "content-type": "application/json" },
+      method: "POST",
+      data: {
+        teams: teams,
+        // matches: matches
+      },
+      success: function (res) {
+        console.log(res.data);
+        console.log("upload callback.");
+      }
+  })
+  },
+
   // 点击输入框时获取该输入框的序号
   tapLscoreChange: function (e) {
     var matches = this.data.matches
