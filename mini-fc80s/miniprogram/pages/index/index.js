@@ -117,8 +117,6 @@ Page({
 
     // onShow 每次页面切换时调用
     onShow: function () {
-        console.log(this.data.isLogin)
-        console.log(app.globalData.isLogin)
         this.getUserInfo();
     },
 
