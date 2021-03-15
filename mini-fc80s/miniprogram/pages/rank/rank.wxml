@@ -24,7 +24,7 @@
     <!-- 积分榜内容 -->
     <block wx:for="{{teams}}" wx:for-item="item" wx:key="index">
       <view class="contentGroup">
-        <view class="contentTeam">{{item.leader}}</view>
+        <view class="contentTeam">{{item.name}}</view>
         <view class="content">{{item.game}}</view>
         <view class="content">{{item.win}}</view>
         <view class="content">{{item.draw}}</view>

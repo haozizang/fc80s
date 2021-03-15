@@ -4,7 +4,7 @@ Page({
     teamCount: 0,
     teams: [
       // {
-      //   leader: "",
+      //   name: "",
       //   game: 0,
       //   win: 0,
       //   draw: 0,
@@ -42,7 +42,7 @@ Page({
     this.load()
   },
 
-  // 输入球队leader -> 监听输入值 并赋值给input
+  // 输入球队name -> 监听输入值 并赋值给input
   inputChangeHandle: function (e) {
     this.setData({ input: e.detail.value })
     this.save()
@@ -56,7 +56,7 @@ Page({
     var orderedTeams = this.data.orderedTeams
     // 将input的值 push 给teams
     teams.push({
-      leader: this.data.input,
+      name: this.data.input,
       game: 0,
       win: 0,
       draw: 0,
@@ -66,7 +66,7 @@ Page({
       finished: false
     })
     orderedTeams.push({
-        leader: this.data.input,
+        name: this.data.input,
         game: 0,
         win: 0,
         draw: 0,
@@ -121,26 +121,26 @@ Page({
     // 根据球队数目来设计比赛
     if (teamCount == 2) {
       var match = [{
-        home: orderedTeams[0].leader,
-        away: orderedTeams[1].leader,
+        home: orderedTeams[0].name,
+        away: orderedTeams[1].name,
         lScore: "",
         rScore: "",
       }]
       // matches.push(match)
     }else if (teamCount == 3) {
       var match = [
-        {home: orderedTeams[0].leader, away: orderedTeams[1].leader, lScore: "", rScore: ""},
-        {home: orderedTeams[0].leader, away: orderedTeams[2].leader, lScore: "", rScore: ""},
-        {home: orderedTeams[1].leader, away: orderedTeams[2].leader, lScore: "", rScore: ""}
+        {home: orderedTeams[0].name, away: orderedTeams[1].name, lScore: "", rScore: ""},
+        {home: orderedTeams[0].name, away: orderedTeams[2].name, lScore: "", rScore: ""},
+        {home: orderedTeams[1].name, away: orderedTeams[2].name, lScore: "", rScore: ""}
         ]
     }else if (teamCount == 4) {
       var match = [
-        { home: orderedTeams[0].leader, away: orderedTeams[3].leader, lScore: "", rScore: "" },
-        { home: orderedTeams[1].leader, away: orderedTeams[2].leader, lScore: "", rScore: "" },
-        { home: orderedTeams[1].leader, away: orderedTeams[3].leader, lScore: "", rScore: "" },
-        { home: orderedTeams[0].leader, away: orderedTeams[2].leader, lScore: "", rScore: "" },
-        { home: orderedTeams[2].leader, away: orderedTeams[3].leader, lScore: "", rScore: "" },
-        { home: orderedTeams[0].leader, away: orderedTeams[1].leader, lScore: "", rScore: "" },
+        { home: orderedTeams[0].name, away: orderedTeams[3].name, lScore: "", rScore: "" },
+        { home: orderedTeams[1].name, away: orderedTeams[2].name, lScore: "", rScore: "" },
+        { home: orderedTeams[1].name, away: orderedTeams[3].name, lScore: "", rScore: "" },
+        { home: orderedTeams[0].name, away: orderedTeams[2].name, lScore: "", rScore: "" },
+        { home: orderedTeams[2].name, away: orderedTeams[3].name, lScore: "", rScore: "" },
+        { home: orderedTeams[0].name, away: orderedTeams[1].name, lScore: "", rScore: "" },
       ]
     }
     matches.push(match)
@@ -230,7 +230,7 @@ Page({
         // var awayResult = { win: Number(goalDiff > 0), draw: Number(goalDiff == 0), loss: Number(goalDiff > 0), goal: -goalDiff, point: goalDiff == 0 ? 1 : 3 * Number(goalDiff < 0) }
         // 遍历球队找到对战双方, 修改其各变量
           for (var teamIndex in teams) {
-            if (match.home == teams[teamIndex].leader) {
+            if (match.home == teams[teamIndex].name) {
               teams[teamIndex].game += 1
               teams[teamIndex].win += Number(goalDiff > 0)
               teams[teamIndex].draw += Number(goalDiff == 0)
@@ -238,7 +238,7 @@ Page({
               teams[teamIndex].goal += goalDiff
               teams[teamIndex].point += goalDiff == 0 ? 1 : 3 * Number(goalDiff > 0)
               
-            } else if (match.away == teams[teamIndex].leader) {
+            } else if (match.away == teams[teamIndex].name) {
               teams[teamIndex].game += 1
               teams[teamIndex].win += Number(goalDiff < 0)
               teams[teamIndex].draw += Number(goalDiff == 0)
