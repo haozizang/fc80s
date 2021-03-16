@@ -16,8 +16,8 @@ class Player(models.Model):
     def __str__(self):
         return self.name
 
-# class Activity(models.Model):
-#     time = models.DateTimeField()
+class Activity(models.Model):
+    time = models.DateTimeField()
 
 class Team(models.Model):
     name = models.CharField(max_length=30)
@@ -25,6 +25,7 @@ class Team(models.Model):
     time = models.DateTimeField()
     players = models.ManyToManyField(Player)
     rank = models.IntegerField(null=True)
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, blank=True, null=True)
     # win = models.IntegerField(default=0)
     # draw = models.IntegerField(default=1)
     # loss = models.IntegerField(default=0)
@@ -35,12 +36,13 @@ class Team(models.Model):
 
 class Match(models.Model):
     # home_team = models.CharField(max_length=30)
-    home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.SET_NULL, blank=True, null=True)
+    home_team = models.ForeignKey(Team, related_name="home_team", on_delete=models.CASCADE, blank=True, null=True)
     # away_team = models.CharField(max_length=30)
-    away_team = models.ForeignKey(Team, related_name="away_name", on_delete=models.SET_NULL, blank=True, null=True)
+    away_team = models.ForeignKey(Team, related_name="away_name", on_delete=models.CASCADE, blank=True, null=True)
     home_goals = models.IntegerField(default=0)
     away_goals = models.IntegerField(default=0)
     time = models.DateTimeField()
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.home_team.name + str(self.home_goals) + " : " + str(self.away_goals) + self.away_team.name
