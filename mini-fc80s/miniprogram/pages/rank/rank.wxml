@@ -6,7 +6,7 @@
     <!-- 添加球队输入框 -->
     <view class="addTeam">
       <image class="plus" src="../../images/plus.png"/>
-      <input value="{{ input }}" placeholder="Add a team..." auto-focus bindinput="inputChangeHandle" bindconfirm="addTodoHandle"/>
+      <input value="{{ input }}" placeholder="Add a team..." auto-focus bindinput="inputChangeHandle" bindconfirm="addTream"/>
     </view>
 
     <!-- 积分榜标题 -->

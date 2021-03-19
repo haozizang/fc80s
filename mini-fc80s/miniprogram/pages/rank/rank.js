@@ -49,7 +49,7 @@ Page({
   },
 
   // 添加球队
-  addTodoHandle: function (e) {
+  addTream: function (e) {
     // 当input无具体值时 return
     if (!this.data.input || !this.data.input.trim()) return
     var teams = this.data.teams
@@ -165,11 +165,14 @@ Page({
   uploadMatch: function() {
     var teams = this.data.teams;
     // var matches = this.data.matches;
+    var activity_time = new Date().toLocaleString('en-US')
+    // console.log(Date.now())
     wx.request({
       url: 'http://127.0.0.1:8000/rank/upload/',
       header: { "content-type": "application/json" },
       method: "POST",
       data: {
+        activity_time: activity_time,
         teams: teams,
         // matches: matches
       },
