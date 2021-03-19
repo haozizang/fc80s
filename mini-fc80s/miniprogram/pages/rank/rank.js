@@ -2,6 +2,7 @@ Page({
   data: {
     input: "",
     teamCount: 0,
+    activity_time: "",
     teams: [
       // {
       //   name: "",
@@ -53,6 +54,9 @@ Page({
     // 当input无具体值时 return
     if (!this.data.input || !this.data.input.trim()) return
     var teams = this.data.teams
+    if (!this.data.teams.length) {
+      this.data.activity_time = new Date().toLocaleString('en-US')
+    }
     var orderedTeams = this.data.orderedTeams
     // 将input的值 push 给teams
     teams.push({
@@ -167,6 +171,15 @@ Page({
     // var matches = this.data.matches;
     var activity_time = new Date().toLocaleString('en-US')
     // console.log(Date.now())
+    console.log('team.len: ', teams.length)
+    console.log('activity_time: ', this.data.activity_time)
+    if (!this.data.teams.length || !this.data.activity_time || !this.data.activity_time.trim()) {
+      wx.showModal({
+          title: '提示',
+          content: "上传活动失败..."
+      });
+      return;
+    }
     wx.request({
       url: 'http://127.0.0.1:8000/rank/upload/',
       header: { "content-type": "application/json" },
