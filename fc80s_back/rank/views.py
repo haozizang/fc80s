@@ -6,7 +6,7 @@ from django.db.models import Q
 
 from datetime import datetime
 
-from index.models import Player, Match, Team
+from index.models import Activity, Player, Match, Team
 
 def rank(request):
     # turn hex kanji into string
@@ -22,13 +22,16 @@ def upload(request):
     body_unicode = request.body.decode("utf-8")
     body = json.loads(body_unicode)
     print("body", body_str)
-    for team in body["teams"]:
-        print("team", team)
-        print("name", team["name"])
-        print("game", team["game"])
-        # create team in DB
-        # get or create the team for the sender
-        dt = datetime(2021, 10, 9, 23, 55, 59, 345433)
-        team = Team.objects.create(name = team["name"])
-    return HttpResponse(json.dumps("upload view function"), content_type="application/json")
+    activity_timestamp = body["activity_time"]
+    time = datetime.fromtimestamp(float(activity_timestamp)/1000)
+    print("backend time:", time)
+    activity, if_created = Activity.objects.get_or_create(time = time)
+    print("if_created: ", if_created)
+    # when activity is not created, don't insert the teams neither
+    if if_created:
+        for team in body["teams"]:
+            print("team", team)
+            # create team in DB
+            team = Team.objects.create(name = team["name"])
+    return HttpResponse(json.dumps({"if_create": if_created}), content_type="application/json")
 
