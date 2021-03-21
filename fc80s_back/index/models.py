@@ -19,10 +19,13 @@ class Player(models.Model):
 class Activity(models.Model):
     time = models.DateTimeField()
 
+    def __str__(self):
+        return self.time.strftime("%Y-%m-%d %H:%M:%S")
+
+
 class Team(models.Model):
     name = models.CharField(max_length=30)
     captain = models.ForeignKey(Player, related_name="captain", on_delete=models.SET_NULL, blank=True, null=True)
-    time = models.DateTimeField()
     players = models.ManyToManyField(Player)
     rank = models.IntegerField(null=True)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, blank=True, null=True)
@@ -41,7 +44,6 @@ class Match(models.Model):
     away_team = models.ForeignKey(Team, related_name="away_name", on_delete=models.CASCADE, blank=True, null=True)
     home_goals = models.IntegerField(default=0)
     away_goals = models.IntegerField(default=0)
-    time = models.DateTimeField()
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):

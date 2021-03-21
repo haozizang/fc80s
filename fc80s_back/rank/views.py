@@ -29,6 +29,6 @@ def upload(request):
         # create team in DB
         # get or create the team for the sender
         dt = datetime(2021, 10, 9, 23, 55, 59, 345433)
-        team = Team.objects.create(name = team["name"], time = dt)
+        team = Team.objects.create(name = team["name"])
     return HttpResponse(json.dumps("upload view function"), content_type="application/json")
 
