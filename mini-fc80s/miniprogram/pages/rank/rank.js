@@ -29,13 +29,20 @@ Page({
   // 启动程序时加载数据data
   load: function () {
     var data = wx.getStorageSync("data")
+    var activity_time = data.activity_time
     var teams = data.teams
     var orderedTeams = data.orderedTeams
     var matches = data.matches
     // 算出球队数目
     if (teams) {
       var teamCount = teams.length
-      this.setData({ teams: teams, orderedTeams: orderedTeams, teamCount: teamCount, matches: matches })
+      this.setData({
+        teams: teams,
+        activity_time: activity_time,
+        orderedTeams: orderedTeams,
+        teamCount: teamCount,
+        matches: matches
+      })
     }
   },
 
@@ -54,8 +61,11 @@ Page({
     // 当input无具体值时 return
     if (!this.data.input || !this.data.input.trim()) return
     var teams = this.data.teams
-    if (!this.data.teams.length) {
-      this.data.activity_time = new Date().toLocaleString('en-US')
+    var activity_time = this.data.activity_time
+    if (!teams.length) {
+      console.log("team length: ", teams.length)
+      console.log("create activity time...")
+      activity_time = new Date().toLocaleString('en-US')
     }
     var orderedTeams = this.data.orderedTeams
     // 将input的值 push 给teams
@@ -82,6 +92,7 @@ Page({
     // 将data设为更新后的teams
     this.setData({
       input: '',
+      activity_time: activity_time,
       teams: teams,
       orderedTeams: orderedTeams,
     })
@@ -168,11 +179,11 @@ Page({
 
   uploadMatch: function() {
     var teams = this.data.teams;
+    var activity_time = this.data.activity_time;
     // var matches = this.data.matches;
-    var activity_time = new Date().toLocaleString('en-US')
     // console.log(Date.now())
     console.log('team.len: ', teams.length)
-    console.log('activity_time: ', this.data.activity_time)
+    console.log('activity_time: ', activity_time)
     if (!this.data.teams.length || !this.data.activity_time || !this.data.activity_time.trim()) {
       wx.showModal({
           title: '提示',
