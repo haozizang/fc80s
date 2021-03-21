@@ -62,10 +62,11 @@ Page({
     if (!this.data.input || !this.data.input.trim()) return
     var teams = this.data.teams
     var activity_time = this.data.activity_time
+    // only create activity_time when create no team in data
     if (!teams.length) {
       console.log("team length: ", teams.length)
       console.log("create activity time...")
-      activity_time = new Date().toLocaleString('en-US')
+      activity_time = new Date().getTime()
     }
     var orderedTeams = this.data.orderedTeams
     // 将input的值 push 给teams
@@ -184,7 +185,8 @@ Page({
     // console.log(Date.now())
     console.log('team.len: ', teams.length)
     console.log('activity_time: ', activity_time)
-    if (!this.data.teams.length || !this.data.activity_time || !this.data.activity_time.trim()) {
+    console.log('type of activity_time: ', typeof activity_time)
+    if (!this.data.teams.length || !this.data.activity_time) {
       wx.showModal({
           title: '提示',
           content: "上传活动失败..."
@@ -202,7 +204,19 @@ Page({
       },
       success: function (res) {
         console.log(res.data);
-        console.log("upload callback.");
+        var if_created = res.data["if_create"]
+        console.log("if_created", if_created);
+        if (if_created) {
+          wx.showModal({
+              title: '提示',
+              content: "上传活动成功!"
+          });
+        } else {
+          wx.showModal({
+              title: '提示',
+              content: "上传活动被拒绝..."
+          });
+        }
       }
   })
   },
