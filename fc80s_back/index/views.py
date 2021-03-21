@@ -34,8 +34,8 @@ def index(request):
             print("away match num: ", away_match_list.count())
             match_num += home_match_list.count()
             match_num += away_match_list.count()
-    print("match count: ", match_num)
-    print("team num(activity num): ", team_list.count())
+            print("match count: ", match_num)
+        print("team num(activity num): ", team_list.count())
     resp = {
         'activities': team_num,
         'matches': match_num,
