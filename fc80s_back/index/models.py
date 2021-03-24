@@ -1,9 +1,17 @@
 from django.db import models
 
+class Club(models.Model):
+    name = models.CharField(max_length=30)
+    create_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.name
+
 # player
 class Player(models.Model):
     # openID -> id
     name = models.CharField(max_length=30)
+    club = models.ForeignKey(Club, on_delete=models.SET_NULL, blank=True, null=True)
     open_id = models.CharField(max_length=50, null=True)
     offence = models.IntegerField(default=0)
     defence = models.IntegerField(default=0)
@@ -21,7 +29,6 @@ class Activity(models.Model):
 
     def __str__(self):
         return self.time.strftime("%Y-%m-%d %H:%M:%S")
-
 
 class Team(models.Model):
     name = models.CharField(max_length=30)

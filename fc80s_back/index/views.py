@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 from django.db.models import Q
 
-from .models import Player, Match, Team
+from .models import Club, Player, Match, Team
 
 def index(request):
     # turn hex kanji into string
@@ -21,6 +21,10 @@ def index(request):
     match_num = 0
     team_num = 0
     if not if_created:
+        # get club the player belongs
+        club = Club.objects.filter(name=player.name)
+        if club:
+            print("player", player.name, "belongs to club: ", club.name)
         # not new user => check team and match
         # get all the team(activity) the sender get involved
         team_list = Team.objects.filter(players__open_id=body["open_id"])
