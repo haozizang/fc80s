@@ -1,6 +1,4 @@
-/**
- * 小程序首页
- */
+ // 小程序首页
 const app = getApp();
 
 // 雷达图的图形尺寸
@@ -13,7 +11,6 @@ var mAngle = Math.PI * 2 / numCount; //角度
 var mRadius = mCenter - 60; //半径(减去的值用于给绘制的文本留空间)
 //获取Canvas
 var radCtx = wx.createCanvasContext("radarCanvas")
-
 
 Page({
     data: {
@@ -69,11 +66,11 @@ Page({
                 console.log(res.result.openid)
                 var local_openid = res.result.openid
                 console.log('result:', res.result)
-                // 弹出提示框
+                /* 弹出提示框
                 wx.showModal({
                     title: '提示',
                     content: local_openid
-                });
+                }); */
                 app.globalData.openid = local_openid
                 that.setData({
                     openid: local_openid
@@ -117,12 +114,15 @@ Page({
 
     // onShow 每次页面切换时调用
     onShow: function () {
+        // this.getUserInfo();
+    },
+
+    // 下拉时调用
+    onPullDownRefresh: function () {
         this.getUserInfo();
     },
 
-    /**
-     * 用户点击右上角分享
-     */
+    // 用户点击右上角分享
     onShareAppMessage: function() {
         return {
             title: '圈子报名',
@@ -131,11 +131,7 @@ Page({
         };
     },
 
-
-    /**
-     * 获取用户信息
-     */
-
+    // 获取用户信息
     bindGetUserInfo: function(event){
         // console.log(event);
         let o = event.detail || {};
@@ -158,9 +154,7 @@ Page({
     },
     
     // 雷达图
-    /*
-    坐标旋转规则：+x轴为0， 顺时针为角度加
-    */
+    // 坐标旋转规则：+x轴为0， 顺时针为角度加
     drawRadar: function() {
         var sourceData1 = this.data.abilityArray1
         // var sourceData2 = this.data.abilityArray2
