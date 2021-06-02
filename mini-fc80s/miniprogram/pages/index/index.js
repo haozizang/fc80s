@@ -1,4 +1,4 @@
- // 小程序首页
+// 小程序首页
 const app = getApp();
 
 // 雷达图的图形尺寸
@@ -14,18 +14,18 @@ var radCtx = wx.createCanvasContext("radarCanvas")
 
 Page({
     data: {
-        canIUse: wx.canIUse('button.open-type.getUserInfo'),
-        isLogin: app.globalData.isLogin,
-        openid: '',
-        nickName: '',
-        avatarUrl: '',
-        activities: 0,
-        matches: 0,
-        abilityArray1: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0],[ "进攻", 0], ["胜率", 0]],
+        p_can_use: wx.canIUse('button.open-type.getUserInfo'),
+        p_is_login: app.globalData.g_is_login,
+        p_openid: '',
+        p_nick_name: '',
+        p_avatar_url: '',
+        p_activities: 0,
+        p_matches: 0,
+        p_abilityArray: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0], ["进攻", 0], ["胜率", 0]],
     },
 
     // onLoad 小程序启动时调用
-    onLoad: function() {
+    onLoad: function () {
         // if userInfo 已授权, 则直接加载
         this.getUserInfo();
     },
@@ -34,21 +34,21 @@ Page({
         var that = this;
         // getSetting 返回 权限设置
         wx.getSetting({
-            success (res){
+            success(res) {
                 if (res.authSetting['scope.userInfo']) {
                     // 已经授权，可以直接调用 getUserInfo 获取头像昵称
                     wx.getUserInfo({
-                        success: function(res) {
-                        console.log(res.userInfo)
-                        that.setData({
-                            isLogin: true,
-                            nickName: res.userInfo.nickName,
-                            avatarUrl: res.userInfo.avatarUrl,
-                        })
-                        that.getOpenId();
+                        success: function (res) {
+                            console.log(res.userInfo)
+                            that.setData({
+                                p_is_login: true,
+                                p_nick_name: res.userInfo.nickName,
+                                p_avatar_url: res.userInfo.avatarUrl,
+                            })
+                            that.getOpenId();
 
-                        app.globalData.isLogin = true;
-                        console.log("name:", that.data.nickName)
+                            app.globalData.g_is_login = true;
+                            console.log("name:", that.data.p_nick_name)
                         }
                     })
                 }
@@ -62,7 +62,7 @@ Page({
         // 云函数调用为异步
         wx.cloud.callFunction({
             name: 'getOpenID',
-            success: function(res) {
+            success: function (res) {
                 console.log(res.result.openid)
                 var local_openid = res.result.openid
                 console.log('result:', res.result)
@@ -71,9 +71,9 @@ Page({
                     title: '提示',
                     content: local_openid
                 }); */
-                app.globalData.openid = local_openid
+                app.globalData.g_openid = local_openid
                 that.setData({
-                    openid: local_openid
+                    p_openid: local_openid
                 })
                 // 与后端交互
                 wx.request({
@@ -82,14 +82,14 @@ Page({
                     method: "POST",
                     data: {
                         open_id: local_openid,
-                        nick_name: that.data.nickName
+                        nick_name: that.data.p_nick_name
                     },
                     success: function (res) {
                         console.log(res.data)
                         that.setData({
-                            matches: res.data.matches,
-                            activities: res.data.activities,
-                            abilityArray1: [["稳定", res.data.stability], ["防守", res.data.defence], ["热情", res.data.passion], ["荣誉", res.data.teamwork],[ "进攻", res.data.offence], ["胜率", res.data.win_ratio]]
+                            p_matches: res.data.matches,
+                            p_activities: res.data.activities,
+                            p_abilityArray: [["稳定", res.data.stability], ["防守", res.data.defence], ["热情", res.data.passion], ["荣誉", res.data.teamwork], ["进攻", res.data.offence], ["胜率", res.data.win_ratio]]
                         })
                         that.drawRadar()
                     }
@@ -99,16 +99,16 @@ Page({
     },
 
     // 用户授权登陆后, 更新页面的函数
-    onGotUserInfo (res) {
+    onGotUserInfo(res) {
         // 查看是否授权
         console.log(res.detail.userInfo)
         var that = this;
         that.setData({
-        isLogin: true,
-        nickName: res.detail.userInfo.nickName,
-        avatarUrl: res.detail.userInfo.avatarUrl,
+            m_is_login: true,
+            p_nick_name: res.detail.userInfo.nickName,
+            p_avatar_url: res.detail.userInfo.avatarUrl,
         })
-        app.globalData.isLogin = true;
+        app.globalData.m_is_login = true;
         this.getUserInfo();
     },
 
@@ -123,7 +123,7 @@ Page({
     },
 
     // 用户点击右上角分享
-    onShareAppMessage: function() {
+    onShareAppMessage: function () {
         return {
             title: '圈子报名',
             desc: '圈子里的人都在用',
@@ -132,16 +132,16 @@ Page({
     },
 
     // 获取用户信息
-    bindGetUserInfo: function(event){
+    bindGetUserInfo: function (event) {
         // console.log(event);
         let o = event.detail || {};
         this.setData({
-            isLogin: o.userInfo ? true : false
+            m_is_login: o.userInfo ? true : false
         });
 
-        app.globalData.isLogin = this.data.isLogin;
+        app.globalData.g_is_login = this.data.p_is_login;
 
-        if(o.userInfo){
+        if (o.userInfo) {
             wx.navigateTo({
                 url: '/pages/post/post'
             });
@@ -152,11 +152,11 @@ Page({
     onReady: function () {
         // this.drawRadar()
     },
-    
+
     // 雷达图
     // 坐标旋转规则：+x轴为0， 顺时针为角度加
-    drawRadar: function() {
-        var sourceData1 = this.data.abilityArray1
+    drawRadar: function () {
+        var sourceData1 = this.data.p_abilityArray
         // var sourceData2 = this.data.abilityArray2
 
         //调用
@@ -164,19 +164,19 @@ Page({
         //this.drawArcEdge() //画圆
         this.drawLinePoint()
         //设置数据
-        this.drawRegion(sourceData1,'rgba(255, 0, 0, 0.5)') //第一个人的
+        this.drawRegion(sourceData1, 'rgba(255, 0, 0, 0.5)') //第一个人的
         // this.drawRegion(sourceData2, 'rgba(255, 200, 0, 0.5)') //第二个人
         //设置文本数据
         this.drawTextCans(sourceData1)
         //设置节点
-        this.drawCircle(sourceData1,'red')
+        this.drawCircle(sourceData1, 'red')
         // this.drawCircle(sourceData2,'yellow')
         //开始绘制
         radCtx.draw()
     },
 
     // 绘制6条边
-    drawEdge: function(){
+    drawEdge: function () {
         radCtx.setStrokeStyle("yellow")
         radCtx.setLineWidth(5)  //设置线宽
         for (var i = 0; i < numSlot; i++) {
@@ -185,22 +185,22 @@ Page({
             var rdius = mRadius / numSlot * (i + 1)
             //画6条线段
             for (var j = 0; j < numCount; j++) {
-            //坐标
-            var x = mCenter + rdius * Math.cos(mAngle * j + Math.PI/6);
-            var y = mCenter + rdius * Math.sin(mAngle * j + Math.PI/6);
-            radCtx.lineTo(x, y);
+                //坐标
+                var x = mCenter + rdius * Math.cos(mAngle * j + Math.PI / 6);
+                var y = mCenter + rdius * Math.sin(mAngle * j + Math.PI / 6);
+                radCtx.lineTo(x, y);
             }
             radCtx.closePath()
             radCtx.stroke()
-        } 
+        }
     },
 
     // 绘制连接点
-    drawLinePoint:function(){
+    drawLinePoint: function () {
         radCtx.beginPath();
         for (var k = 0; k < numCount; k++) {
-            var x = mCenter + mRadius * Math.cos(mAngle * k + Math.PI/6);
-            var y = mCenter + mRadius * Math.sin(mAngle * k + Math.PI/6);
+            var x = mCenter + mRadius * Math.cos(mAngle * k + Math.PI / 6);
+            var y = mCenter + mRadius * Math.sin(mAngle * k + Math.PI / 6);
 
             radCtx.moveTo(mCenter, mCenter);
             radCtx.lineTo(x, y);
@@ -209,13 +209,13 @@ Page({
     },
 
     //绘制数据区域(数据和填充颜色)
-    drawRegion: function (mData,color){   
+    drawRegion: function (mData, color) {
         radCtx.beginPath();
-        for (var m = 0; m < numCount; m++){
-        var x = mCenter + mRadius * Math.cos(mAngle * m + Math.PI/6) * mData[m][1] / 100;
-        var y = mCenter + mRadius * Math.sin(mAngle * m + Math.PI/6) * mData[m][1] / 100;
+        for (var m = 0; m < numCount; m++) {
+            var x = mCenter + mRadius * Math.cos(mAngle * m + Math.PI / 6) * mData[m][1] / 100;
+            var y = mCenter + mRadius * Math.sin(mAngle * m + Math.PI / 6) * mData[m][1] / 100;
 
-        radCtx.lineTo(x, y);
+            radCtx.lineTo(x, y);
         }
         radCtx.closePath();
         radCtx.setFillStyle(color)
@@ -223,33 +223,33 @@ Page({
     },
 
     //绘制文字
-    drawTextCans: function (mData){
+    drawTextCans: function (mData) {
         radCtx.setFillStyle("yellow")
         radCtx.font = 'bold 17px cursive'  //设置字体
         for (var n = 0; n < numCount; n++) {
-            var x = mCenter + mRadius * Math.cos(mAngle * n + Math.PI/6);
-            var y = mCenter + mRadius * Math.sin(mAngle * n + Math.PI/6);
+            var x = mCenter + mRadius * Math.cos(mAngle * n + Math.PI / 6);
+            var y = mCenter + mRadius * Math.sin(mAngle * n + Math.PI / 6);
             // radCtx.fillText(mData[n][0], x, y);
             //通过不同的位置，调整文本的显示位置
             if (mAngle * n == 0) {
                 // 右下顶点
-                radCtx.fillText(mData[n][0], x+5, y+5);
+                radCtx.fillText(mData[n][0], x + 5, y + 5);
             }
             if (mAngle * n == Math.PI / 3) {
                 // 下顶点
-                radCtx.fillText(mData[n][0], x-15, y+20);
+                radCtx.fillText(mData[n][0], x - 15, y + 20);
             }
             if (mAngle * n == Math.PI / 3 * 2) {
                 // 左下顶点
-                radCtx.fillText(mData[n][0], x - radCtx.measureText(mData[n][0]).width-7, y+5);
+                radCtx.fillText(mData[n][0], x - radCtx.measureText(mData[n][0]).width - 7, y + 5);
             }
             if (mAngle * n == Math.PI) {
                 // 左上顶点
-                radCtx.fillText(mData[n][0], x - radCtx.measureText(mData[n][0]).width-7, y+5);
+                radCtx.fillText(mData[n][0], x - radCtx.measureText(mData[n][0]).width - 7, y + 5);
             }
             if (mAngle * n == Math.PI / 3 * 4) {
                 // 上顶点
-                radCtx.fillText(mData[n][0], x-15, y-10);
+                radCtx.fillText(mData[n][0], x - 15, y - 10);
             }
             if (mAngle * n == Math.PI / 3 * 5) {
                 radCtx.fillText(mData[n][0], x + 5, y);
@@ -257,16 +257,16 @@ Page({
         }
     },
 
-    drawCircle: function(mData,color){
+    drawCircle: function (mData, color) {
         var r = 3; //设置节点小圆点的半径
-        for(var i = 0; i<numCount; i ++){
-           var x = mCenter + mRadius * Math.cos(mAngle * i + Math.PI/6) * mData[i][1] / 100;
-           var y = mCenter + mRadius * Math.sin(mAngle * i + Math.PI/6) * mData[i][1] / 100;
- 
-           radCtx.beginPath();
-           radCtx.arc(x, y, r, 0, Math.PI * 2);
-           radCtx.fillStyle = color;
-           radCtx.fill();
-         }
+        for (var i = 0; i < numCount; i++) {
+            var x = mCenter + mRadius * Math.cos(mAngle * i + Math.PI / 6) * mData[i][1] / 100;
+            var y = mCenter + mRadius * Math.sin(mAngle * i + Math.PI / 6) * mData[i][1] / 100;
+
+            radCtx.beginPath();
+            radCtx.arc(x, y, r, 0, Math.PI * 2);
+            radCtx.fillStyle = color;
+            radCtx.fill();
+        }
     }
 })

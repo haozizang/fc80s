@@ -6,7 +6,7 @@
     <!-- 添加球队输入框 -->
     <view class="addTeam">
       <image class="plus" src="../../images/plus.png"/>
-      <input value="{{ input }}" placeholder="Add a team..." auto-focus bindinput="inputChangeHandle" bindconfirm="addTream"/>
+      <input value="{{ p_input }}" placeholder="Add a team..." auto-focus bindinput="inputChangeHandle" bindconfirm="addTream"/>
     </view>
 
     <!-- 积分榜标题 -->
@@ -22,7 +22,7 @@
     </view>
 
     <!-- 积分榜内容 -->
-    <block wx:for="{{teams}}" wx:for-item="item" wx:key="index">
+    <block wx:for="{{p_teams}}" wx:for-item="item" wx:key="index">
       <view class="contentGroup">
         <view class="contentTeam">{{item.name}}</view>
         <view class="content">{{item.game}}</view>
@@ -49,16 +49,16 @@
   </view> -->
 
   <!-- 对战表 -使用两个block:解包matches=[ [{}] ]: 内层列表表示一轮比赛,使用内层block实现 -->
-  <view class="matches" style="padding-top: {{fixedHeight}}px;">
-    <block wx:if="{{ matches }}">
-      <view class="roundBox" wx:for="{{ matches }}"  bindtap="tapLscoreChange" wx:for-item="item" wx:key="index" data-index="{{ index }}" >
+  <view class="matches" style="padding-top: {{p_fixed_height}}px;">
+    <block wx:if="{{ p_matches }}">
+      <view class="roundBox" wx:for="{{ p_matches }}"  bindtap="tapLscoreChange" wx:for-item="item" wx:key="index" data-index="{{ index }}" >
         <block wx:for="{{ item }}" wx:for-item="newItem" wx:key="index" >
           <view class="versus">
             <text class="homeTeam">{{newItem.home}}</text>
             <view class="input">
-              <input type="number" value="{{ newItem.lScore }}" class="scoreInput" bindinput="inputScoreChange" bindconfirm="confirmScoreChange" data-index="{{ index + 1 }}" />
+              <input type="number" value="{{ newItem.left_score }}" class="scoreInput" bindinput="inputScoreChange" bindconfirm="confirmScoreChange" data-index="{{ index + 1 }}" />
               ー
-              <input type="number" value="{{ newItem.rScore }}" class="scoreInput"  bindinput="inputScoreChange" bindconfirm="confirmScoreChange" data-index="{{ -index - 1 }}" />
+              <input type="number" value="{{ newItem.right_score }}" class="scoreInput"  bindinput="inputScoreChange" bindconfirm="confirmScoreChange" data-index="{{ -index - 1 }}" />
             </view>
             <text class="awayTeam">{{newItem.away}}</text>
         <!-- 　　 {{newItem.away}} -->
