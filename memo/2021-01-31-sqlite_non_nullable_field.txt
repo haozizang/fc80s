@@ -1,0 +1,3 @@
+# alert 'you are adding a non-nullable field' to db...
+- rm the migration files.
+
