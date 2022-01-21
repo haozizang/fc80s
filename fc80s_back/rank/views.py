@@ -26,6 +26,7 @@ def upload(request):
     activity_timestamp = body["activity_time"]
     # get local time-zone
     time_zone = datetime.utcnow().astimezone().tzinfo
+    print(time_zone)
     time = datetime.fromtimestamp(float(activity_timestamp)/1000, time_zone)
     print("backend time:", time)
     activity, if_created = Activity.objects.get_or_create(time = time)
@@ -35,7 +36,7 @@ def upload(request):
         for team in body["teams"]:
             print("team", team)
             # create team in DB
-            team = Team.objects.create(name = team["name"])
+            team = Team.objects.create(name = team["name"], rank = team["rank"], activity = activity, win = team["win"], draw = team["draw"], loss = team["loss"], point = team["point"], goal = team["goal"])
     return HttpResponse(json.dumps({"if_create": if_created}), content_type="application/json")
 
 # return the rank of latest activity

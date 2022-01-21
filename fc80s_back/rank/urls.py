@@ -8,4 +8,3 @@ urlpatterns = [
     # /rank/upload
     path('upload/', views.upload, name='upload'),
 ]
-
