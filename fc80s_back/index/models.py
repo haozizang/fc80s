@@ -36,9 +36,11 @@ class Team(models.Model):
     players = models.ManyToManyField(Player)
     rank = models.IntegerField(null=True)
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, blank=True, null=True)
-    # win = models.IntegerField(default=0)
-    # draw = models.IntegerField(default=1)
-    # loss = models.IntegerField(default=0)
+    win = models.IntegerField(default=0)
+    draw = models.IntegerField(default=0)
+    loss = models.IntegerField(default=0)
+    point = models.IntegerField(default=0)
+    goal = models.IntegerField(default=0)
     # 添加GS(goal scored), GA(goal against) -> 算出 GD(goal difference)
 
     def __str__(self):
