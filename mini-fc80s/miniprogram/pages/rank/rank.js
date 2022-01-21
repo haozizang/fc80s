@@ -81,18 +81,18 @@ Page({
       loss: 0,
       goal: 0,
       point: 0,
-      finished: false
+      rank: 0,
     })
     ordered_teams.push({
-        name: input,
-        game: 0,
-        win: 0,
-        draw: 0,
-        loss: 0,
-        goal: 0,
-        point: 0,
-        finished: false
-      })
+      name: input,
+      game: 0,
+      win: 0,
+      draw: 0,
+      loss: 0,
+      goal: 0,
+      point: 0,
+      rank: 0,
+    })
     // 将data设为更新后的teams
     this.setData({
       p_input: "",
@@ -307,17 +307,15 @@ Page({
         return value2 - value1
       }
     )
+    for (team_index in teams) {
+      if (Number(team_index) + 1 == teams.length) {
+        teams[team_index].rank = -1
+      } else {
+        teams[team_index].rank = Number(team_index) + 1
+      }
+    }
+    console.log("teams:", teams)
     this.setData({ p_teams: teams })
     this.save()
   },
-
-  // NOT_USED_FUNCTION 
-  // add sort function
-  teamSort: function (property) {
-    return function(team1, team2) {
-      var value1 = team1[property]
-      var value2 = team2[property]
-      return value2 - value1
-    }
-  }
 })
