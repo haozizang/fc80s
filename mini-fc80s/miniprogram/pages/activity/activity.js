@@ -2,14 +2,13 @@ const app = getApp();
 
 Page({
     data: {
-        canIUse: wx.canIUse('button.open-type.getUserInfo'),
-        isLogin: false,
+        p_can_use: wx.canIUse('button.open-type.getUserInfo'),
+        p_is_login: false,
     },
     // onShow 每次页面切换时调用
     onShow: function () {
         this.setData({
-            isLogin: app.globalData.isLogin
+            isLogin: app.globalData.g_is_login
         })
-        console.log(this.data.isLogin)
     }
 })
