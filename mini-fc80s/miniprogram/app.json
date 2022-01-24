@@ -31,7 +31,7 @@
       },
       {
         "pagePath": "pages/activity/activity",
-        "text": "test",
+        "text": "activity",
         "iconPath": "images/rank.png",
         "selectedIconPath": "images/rank_selected.png"
       }
