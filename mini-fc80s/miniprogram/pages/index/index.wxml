@@ -12,7 +12,7 @@
                 </view>
             </view>
             <view class="ui-post">
-                <navigator url="/pages/post/post" wx:if="{{isLogin}}">
+                <navigator url="/pages/post/post" wx:if="{{p_is_login}}">
                     <button class="weui-btn" type="primary" size="mini">发起接龙</button>
                 </navigator>
                 <button class="weui-btn" type="primary" size="mini" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" wx:else>发起接龙</button>
@@ -33,7 +33,6 @@
 </view>    <!-- end of wx:if-->
 
 <view wx:else class="p_is_login">
-    <button wx:if="{{canIUse}}" open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">授权登陆</button>
+    <button wx:if="{{p_can_use}}" open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">授权登陆</button>
     <view wx:else>请升级微信版本</view>
 </view>
-
