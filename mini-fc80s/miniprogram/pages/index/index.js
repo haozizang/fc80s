@@ -12,58 +12,75 @@ var mRadius = mCenter - 60; //半径(减去的值用于给绘制的文本留空�
 //获取Canvas
 var radCtx = wx.createCanvasContext("radarCanvas")
 
+
 Page({
     data: {
         p_can_use: wx.canIUse('button.open-type.getUserInfo'),
-        p_is_login: app.globalData.g_is_login,
+        p_is_ready: false,
+        p_user_info: {},
         p_openid: '',
-        p_nick_name: '',
-        p_avatar_url: '',
-        p_activities: 0,
-        p_matches: 0,
-        p_abilityArray: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0], ["进攻", 0], ["胜率", 0]],
+        // business data
+        p_user_profile: {
+            activities: 0,
+            matches: 0,
+            ability_array: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0], ["进攻", 0], ["胜率", 0]],
+        }
     },
 
     // onLoad 小程序启动时调用
     onLoad: function () {
-        // if userInfo 已授权, 则直接加载
-        this.getUserInfo();
+        console.log("call index.onLoad")
+        var c_is_ready = wx.getStorageSync("c_is_ready");
+        if (!c_is_ready) {
+            return
+        }
+        this.setData({
+            p_is_ready: c_is_ready,
+        })
+        var c_user_info = wx.getStorageSync("c_user_info");
+        if (c_user_info == true) {
+            this.setData({
+                p_user_info: c_user_info,
+            })
+        }
+        console.log('user_info', c_user_info)
+        var c_openid = wx.getStorageSync("c_openid");
+        if (c_openid) {
+            this.setData({
+                p_openid: c_openid,
+            })
+        }
+        var c_user_profile = wx.getStorageSync("c_user_profile");
+        if (c_user_profile) {
+            this.setData({
+                p_user_profile: c_user_profile,
+            })
+        } else {
+            this.getUserProfile()
+        }
+        this.drawRadar()
     },
 
-    getUserInfo() {
-        var that = this;
-        // getSetting 返回 权限设置
-        wx.getSetting({
-            success(res) {
-                if (res.authSetting['scope.userInfo']) {
-                    // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-                    wx.getUserInfo({
-                        success: function (res) {
-                            console.log(res.userInfo)
-                            that.setData({
-                                p_is_login: true,
-                                p_nick_name: res.userInfo.nickName,
-                                p_avatar_url: res.userInfo.avatarUrl,
-                            })
-                            that.getOpenId();
-
-                            app.globalData.g_is_login = true;
-                            console.log("name:", that.data.p_nick_name)
-                        }
-                    })
-                }
-            }
+    onGotUserInfo(res) {
+        console.log("call index.onGotUserInfo")
+        this.setData({
+            p_user_info: res.detail.userInfo,
+            p_is_ready: true,
         })
+        wx.setStorageSync('c_is_ready', true)
+        wx.setStorageSync('c_user_info', this.data.p_user_info)
+        // reload after auth
+        this.onLoad();
     },
 
     getOpenId() {
+        console.log("call index.getOpenId")
         var that = this;
         // 获取，保存 openid
         // 云函数调用为异步
         wx.cloud.callFunction({
             name: 'getOpenID',
             success: function (res) {
-                console.log(res.result.openid)
                 var local_openid = res.result.openid
                 console.log('result:', res.result)
                 /* 弹出提示框
@@ -75,41 +92,37 @@ Page({
                 that.setData({
                     p_openid: local_openid
                 })
-                // 与后端交互
-                wx.request({
-                    url: 'http://127.0.0.1:8000/index/',
-                    header: { "content-type": "application/json" },
-                    method: "POST",
-                    data: {
-                        open_id: local_openid,
-                        nick_name: that.data.p_nick_name
-                    },
-                    success: function (res) {
-                        console.log(res.data)
-                        that.setData({
-                            p_matches: res.data.matches,
-                            p_activities: res.data.activities,
-                            p_abilityArray: [["稳定", res.data.stability], ["防守", res.data.defence], ["热情", res.data.passion], ["荣誉", res.data.teamwork], ["进攻", res.data.offence], ["胜率", res.data.win_ratio]]
-                        })
-                        that.drawRadar()
-                    }
-                })
+                wx.setStorageSync('c_openid', local_openid)
             },
         })
     },
 
-    // 用户授权登陆后, 更新页面的函数
-    onGotUserInfo(res) {
-        // 查看是否授权
-        console.log(res.detail.userInfo)
+    // get from server
+    getUserProfile() {
+        console.log("call index.getUserProfile")
+        console.log("nickName: ", this.data.p_user_info)
         var that = this;
-        that.setData({
-            m_is_login: true,
-            p_nick_name: res.detail.userInfo.nickName,
-            p_avatar_url: res.detail.userInfo.avatarUrl,
+        // 与后端交互
+        wx.request({
+            url: 'http://127.0.0.1:8000/index/',
+            header: { "content-type": "application/json" },
+            method: "POST",
+            data: {
+                open_id: that.data.p_openid,
+                nick_name: that.data.p_user_info.nickName
+            },
+            success: function (res) {
+                that.setData({
+                    ['p_user_profile.matches']: res.data.matches,
+                    ['p_user_profile.activities']: res.data.activities,
+                    ['p_user_profile.ability_array']: [["稳定", res.data.stability], ["防守", res.data.defence], ["热情", res.data.passion], ["荣誉", res.data.teamwork], ["进攻", res.data.offence], ["胜率", res.data.win_ratio]]
+                })
+
+                wx.setStorageSync('c_user_profile', that.data.p_user_profile)
+                console.log("that.data.p_user_profile: ", that.data.p_user_profile)
+                // that.drawRadar()
+            }
         })
-        app.globalData.m_is_login = true;
-        this.getUserInfo();
     },
 
     // onShow 每次页面切换时调用
@@ -133,14 +146,7 @@ Page({
 
     // 获取用户信息
     bindGetUserInfo: function (event) {
-        // console.log(event);
         let o = event.detail || {};
-        this.setData({
-            m_is_login: o.userInfo ? true : false
-        });
-
-        app.globalData.g_is_login = this.data.p_is_login;
-
         if (o.userInfo) {
             wx.navigateTo({
                 url: '/pages/post/post'
@@ -156,8 +162,7 @@ Page({
     // 雷达图
     // 坐标旋转规则：+x轴为0， 顺时针为角度加
     drawRadar: function () {
-        var sourceData1 = this.data.p_abilityArray
-        // var sourceData2 = this.data.abilityArray2
+        var sourceData1 = this.data.p_user_profile.ability_array
 
         //调用
         this.drawEdge() //画六边形

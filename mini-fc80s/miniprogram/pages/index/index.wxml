@@ -1,5 +1,5 @@
-
-<view wx:if="{{p_is_login == true}}" class="p_is_login">
+<!-- <view>p_is_ready: {{p_is_ready}}</view> -->
+<view wx:if="{{p_is_ready == true}}" class="p_is_ready">
     <!-- 头部 -->
     <view class="ui-header">
         <view class="weui-flex">
@@ -11,18 +11,12 @@
                     <open-data type="userNickName"></open-data>
                 </view>
             </view>
-            <view class="ui-post">
-                <navigator url="/pages/post/post" wx:if="{{p_is_login}}">
-                    <button class="weui-btn" type="primary" size="mini">发起接龙</button>
-                </navigator>
-                <button class="weui-btn" type="primary" size="mini" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" wx:else>发起接龙</button>
-            </view>
         </view>
     </view>
 
     <div class="weui-flex">
-        <div class="weui-flex__item"><div class="placeholder">活动: {{ p_activities }}</div></div>
-        <div class="weui-flex__item"><div class="placeholder">比赛: {{ p_matches }}</div></div>
+        <div class="weui-flex__item"><div class="placeholder">活动: {{ p_user_profile.activities }}</div></div>
+        <div class="weui-flex__item"><div class="placeholder">比赛: {{ p_user_profile.matches }}</div></div>
     </div>
 
     <!-- radar chart -->
@@ -32,7 +26,7 @@
 
 </view>    <!-- end of wx:if-->
 
-<view wx:else class="p_is_login">
-    <button wx:if="{{p_can_use}}" open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">授权登陆</button>
+<view wx:else class="p_is_ready">
+    <button wx:if="{{p_can_use}}" open-type='getUserInfo' lang="zh_CN" bindgetuserinfo="onGotUserInfo">授权登录</button>
     <view wx:else>请升级微信版本</view>
 </view>
