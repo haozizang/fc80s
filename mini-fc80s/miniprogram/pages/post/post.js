@@ -173,28 +173,24 @@ Page({
             title: '提交中...',
         });
 
-        // 调用云函数
-        wx.cloud.callFunction({
-            name: 'post',
-            data: data
-        }).then(res => {
-            console.log(res);
-            console.log('post POST func success');
-            // 隐藏loading
-            wx.hideLoading();
-            
-            // 跳到详情页
-            wx.redirectTo({
-                url: `/pages/detail/detail?id=${res.result._id}`,
-            });
-        }).catch(err => {
-            console.log(err);
-            console.log('post POST func err');
-            wx.hideLoading();
-            wx.showModal({
-                title: '提示',
-                content: '系统异常，请稍后再试'
-            });
+        var act_create_time = new Date().getTime()
+        var that = this;
+        // 与后端交互
+        wx.request({
+            url: 'http://127.0.0.1:8000/activity/',
+            header: { "content-type": "application/json" },
+            method: "POST",
+            data: {
+                open_id: that.data.p_openid,
+                act_create_time: that.act_create_time,
+            },
+            success: function (res) {
+                if (res.result) {
+                    console.log("created activity")
+                } else {
+                    console.log("failed to create activity")
+                }
+            }
         })
     },
 
