@@ -144,16 +144,6 @@ Page({
         };
     },
 
-    // 获取用户信息
-    bindGetUserInfo: function (event) {
-        let o = event.detail || {};
-        if (o.userInfo) {
-            wx.navigateTo({
-                url: '/pages/post/post'
-            });
-        }
-    },
-
 
     onReady: function () {
         // this.drawRadar()

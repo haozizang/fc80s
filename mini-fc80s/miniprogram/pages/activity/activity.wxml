@@ -14,7 +14,7 @@
                 <navigator url="/pages/post/post" wx:if="{{p_is_}}">
                     <button class="weui-btn" type="primary" size="mini">发起活动</button>
                 </navigator>
-                <button class="weui-btn" type="primary" size="mini" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" wx:else>发起接龙</button>
+                <button class="weui-btn" type="primary" size="mini" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" wx:else>发起活动</button>
             </view>
         </view>
     </view>

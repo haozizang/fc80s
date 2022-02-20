@@ -20,5 +20,15 @@ Page({
 
     // onShow 每次页面切换时调用
     onShow: function () {
+    },
+
+    // 获取用户信息
+    bindGetUserInfo: function (event) {
+        let o = event.detail || {};
+        if (o.userInfo) {
+            wx.navigateTo({
+                url: '/pages/post/post'
+            });
+        }
     }
 })
