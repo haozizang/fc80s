@@ -9,9 +9,9 @@ Page({
         userInfo: {},
         // 内容大小限制为200字符
         contentSize: 0,
-        // 场景集合
-        scenes: ["活动", "拼团"],
-        // 默认的场景
+        // 活动集合
+        scenes: ["比赛", "团建"],
+        // 默认的活动
         sceneIndex: 0,
         // 上传文件-文件列表
         files: [],
@@ -32,7 +32,7 @@ Page({
         }
 
         wx.setNavigationBarTitle({
-            title: '发起活动'
+            title: '发起比赛'
         });
 
         // 获取用户信息
@@ -92,7 +92,7 @@ Page({
     },
 
     /**
-     * 选择场景
+     * 选择活动
      */
     bindSceneChange: function(e) {
         // console.log('Scenes:', e.detail.value);
@@ -143,7 +143,7 @@ Page({
 
         if(!data['title']) {
             wx.showToast({
-                title: data['sceneIndex'] == 0 ? '请输入活动主题' : '请输入商品名称',
+                title: data['sceneIndex'] == 0 ? '请输入比赛主题' : '请输入商品名称',
                 icon: 'none'
             });
 
@@ -161,7 +161,7 @@ Page({
 
         if (!data['content']) {
             wx.showToast({
-                title: data['sceneIndex'] == 0 ? '请输入活动内容' : '请输入商品描述',
+                title: data['sceneIndex'] == 0 ? '请输入比赛内容' : '请输入商品描述',
                 icon: 'none'
             });
 

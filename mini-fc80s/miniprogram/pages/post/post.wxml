@@ -3,10 +3,10 @@
         <!-- 表单 -->
         <view class="weui-cells weui-cells_after-title">
 
-            <!-- 场景 -->
+            <!-- 活动 -->
             <view class="weui-cell weui-cell_select">
                 <view class="weui-cell__hd weui-cell__hd_in-select-after">
-                    <view class="weui-label">选择场景</view>
+                    <view class="weui-label">选择活动</view>
                 </view>
                 <view class="weui-cell__bd">
                     <picker bindchange="bindSceneChange" value="{{sceneIndex}}" range="{{scenes}}" name="sceneIndex">
@@ -15,7 +15,7 @@
                 </view>
             </view>
 
-            <!-- 活动模块 -->
+            <!-- 比赛模块 -->
             <view wx:if="{{sceneIndex==0}}">
                 <!-- 报名上限 -->
                 <view class="weui-cell weui-cell_input">
@@ -27,20 +27,20 @@
                     </view>
                 </view>
 
-                <!-- 活动主题 -->
+                <!-- 比赛主题 -->
                 <view class="weui-cell weui-cell_input">
                     <view class="weui-cell__hd">
-                        <view class="weui-label">活动主题</view>
+                        <view class="weui-label">比赛主题</view>
                     </view>
                     <view class="weui-cell__bd">
                         <input confirm-type="next" name="title" maxlength="12" class="weui-input" placeholder="例如：大学同学会" />
                     </view>
                 </view>
 
-                <!-- 活动内容 -->
+                <!-- 比赛内容 -->
                 <view class="weui-cell">
                     <view class="weui-cell__bd">
-                        <textarea name="content" maxlength="200" bindinput="bindInput" class="weui-textarea" placeholder="活动内容，不超过200字" auto-height="{{true}}" />
+                        <textarea name="content" maxlength="200" bindinput="bindInput" class="weui-textarea" placeholder="比赛内容，不超过200字" auto-height="{{true}}" />
                         <view class="weui-textarea-counter">{{contentSize}}/200</view>
                     </view>
                 </view>
@@ -61,7 +61,7 @@
                 </view> -->
             </view>
 
-            <!-- 拼团模块 -->
+            <!-- 团建模块 -->
             <view wx:if="{{sceneIndex==1}}">
                 <!-- 报名上限 -->
                 <view class="weui-cell weui-cell_input">
