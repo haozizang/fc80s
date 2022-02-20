@@ -15,8 +15,8 @@ App({
 
         // 全局数据 globalData
         this.globalData = {
-            g_is_login: false,
-            g_openid: '',
+            // g_is_ready: false,
+            // g_openid: '',
         }
 
         // 查询授权

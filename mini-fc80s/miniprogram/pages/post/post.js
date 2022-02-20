@@ -107,7 +107,7 @@ Page({
      * 提交数据
      */
     bindSubmit: function(e){
-        if(!app.globalData.isLogin) {
+        if(!app.globalData.g_is_ready) {
             wx.showModal({
                 title: '提示',
                 content: '发布失败，请先登录'

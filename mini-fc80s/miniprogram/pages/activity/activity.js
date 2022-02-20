@@ -2,7 +2,7 @@ const app = getApp();
 
 Page({
     data: {
-        p_can_use: wx.canIUse('button.open-type.getUserInfo'),
+        // p_can_use: wx.canIUse('button.open-type.getUserInfo'),
         p_is_ready: false,
     },
 
@@ -20,6 +20,11 @@ Page({
 
     // onShow 每次页面切换时调用
     onShow: function () {
+        if (app.globalData.g_is_ready) {
+            this.setData({
+                p_is_ready: true,
+            })
+        }
     },
 
     // 获取用户信息

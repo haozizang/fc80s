@@ -34,6 +34,7 @@ Page({
         if (!c_is_ready) {
             return
         }
+        app.globalData.g_is_ready = true;
         this.setData({
             p_is_ready: c_is_ready,
         })
@@ -67,6 +68,7 @@ Page({
             p_user_info: res.detail.userInfo,
             p_is_ready: true,
         })
+        app.globalData.g_is_ready = true;
         wx.setStorageSync('c_is_ready', true)
         wx.setStorageSync('c_user_info', this.data.p_user_info)
         // reload after auth
