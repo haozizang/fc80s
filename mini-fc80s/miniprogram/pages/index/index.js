@@ -44,12 +44,15 @@ Page({
                 p_user_info: c_user_info,
             })
         }
-        console.log('user_info', c_user_info)
+        // console.log('user_info', c_user_info)
         var c_openid = wx.getStorageSync("c_openid");
         if (c_openid) {
             this.setData({
                 p_openid: c_openid,
             })
+            app.globalData.g_openid = c_openid;
+        } else {
+            this.getOpenId();
         }
         var c_user_profile = wx.getStorageSync("c_user_profile");
         if (c_user_profile) {

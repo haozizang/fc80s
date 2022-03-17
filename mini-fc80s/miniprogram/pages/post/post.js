@@ -110,7 +110,7 @@ Page({
         if(!app.globalData.g_is_ready) {
             wx.showModal({
                 title: '提示',
-                content: '发布失败，请先登录'
+                content: '发布失败，请先登录'
             });
             return;
         }
@@ -176,15 +176,19 @@ Page({
         var act_create_time = new Date().getTime()
         var that = this;
         // 与后端交互
+        if (app.globalData.g_openid) {
+            console.log("DBG: g_openid found")
+        }
         wx.request({
-            url: 'http://127.0.0.1:8000/activity/',
+            url: 'http://127.0.0.1:8000/activity/create/',
             header: { "content-type": "application/json" },
             method: "POST",
             data: {
-                open_id: that.data.p_openid,
-                act_create_time: that.act_create_time,
+                open_id: app.globalData.g_openid,
+                act_create_time: act_create_time,
             },
             success: function (res) {
+                console.log("res:", res)
                 if (res.result) {
                     console.log("created activity")
                 } else {
