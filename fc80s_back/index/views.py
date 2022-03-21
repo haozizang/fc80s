@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 from django.db.models import Q
 
-from .models import Club, Player, Match, Team
+from index.models import Club, Player, Match, Team
 
 def index(request):
     # turn hex kanji into string

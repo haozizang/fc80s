@@ -1,4 +1,10 @@
 from django.db import models
+import enum
+
+class ActType(enum.Enum):
+    PracticeGame = "Practice"
+    OfficialGame = "OfficialGame"
+    Party = "Party"
 
 class Club(models.Model):
     name = models.CharField(max_length=30)
@@ -25,10 +31,20 @@ class Player(models.Model):
         return self.name
 
 class Activity(models.Model):
-    time = models.DateTimeField()
+    act_name = models.CharField(max_length=20)
+    act_type = models.CharField(
+        max_length=20,
+        choices=[(ele, ele.value) for ele in ActType]
+    )
+    act_content = models.CharField(max_length=30, null=True)
+    act_time = models.DateTimeField()
+    creator_open_id = models.CharField(max_length=50, null=True)
+    create_time = models.DateTimeField()
+    max_num = models.IntegerField()
 
     def __str__(self):
-        return self.time.strftime("%Y-%m-%d %H:%M:%S")
+        #return self.create_time.strftime("%Y-%m-%d %H:%M:%S")
+        return self.act_name
 
 class Team(models.Model):
     name = models.CharField(max_length=30)
