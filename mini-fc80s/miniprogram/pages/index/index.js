@@ -55,6 +55,7 @@ Page({
             this.getOpenId();
         }
         var c_user_profile = wx.getStorageSync("c_user_profile");
+        console.log(`activities: ${c_user_profile.activities}, ${c_user_profile.matches}`)
         if (c_user_profile) {
             this.setData({
                 p_user_profile: c_user_profile,
@@ -88,7 +89,7 @@ Page({
             success: function (res) {
                 var local_openid = res.result.openid
                 console.log('result:', res.result)
-                /* 弹出提示框
+                /* 弹出提示框 popup
                 wx.showModal({
                     title: '提示',
                     content: local_openid
@@ -124,8 +125,14 @@ Page({
                 })
 
                 wx.setStorageSync('c_user_profile', that.data.p_user_profile)
-                console.log("that.data.p_user_profile: ", that.data.p_user_profile)
                 // that.drawRadar()
+            }
+            ,fail: function (res) {
+                // 请求失败弹出提示框 popup
+                wx.showModal({
+                    title: '错误',
+                    content: "请求个人数据失败"
+                });
             }
         })
     },
