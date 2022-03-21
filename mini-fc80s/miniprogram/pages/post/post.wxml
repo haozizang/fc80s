@@ -9,21 +9,21 @@
                     <view class="weui-label">选择活动</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <picker bindchange="bindSceneChange" value="{{sceneIndex}}" range="{{scenes}}" name="sceneIndex">
-                        <view class="weui-select">{{scenes[sceneIndex]}}</view>
+                    <picker bindchange="bindSceneChange" value="{{scene_ind}}" range="{{scenes}}" name="scene_ind">
+                        <view class="weui-select">{{scenes[scene_ind]}}</view>
                     </picker>
                 </view>
             </view>
 
             <!-- 练习赛模块 -->
-            <view wx:if="{{sceneIndex==0}}">
+            <view wx:if="{{scene_ind==0}}">
                 <!-- 报名上限 -->
                 <view class="weui-cell weui-cell_input">
                     <view class="weui-cell__hd">
                         <view class="weui-label">报名上限</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input confirm-type="next" name="maximum" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
+                        <input confirm-type="next" name="max_mem" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
                     </view>
                 </view>
 
@@ -33,7 +33,7 @@
                         <view class="weui-label">活动名称</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input name="title" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：队内红蓝大战" />
+                        <input name="act_name" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：队内红蓝大战" />
                     </view>
                 </view>
 
@@ -43,7 +43,7 @@
                         <view class="weui-label">活动费用</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input type="digit" name="amount" confirm-type="next" class="weui-input" placeholder="例如：9块9" />
+                        <input type="digit" name="fee" confirm-type="next" class="weui-input" placeholder="例如：9块9" />
                     </view>
                 </view>
 
@@ -58,14 +58,14 @@
 
 
             <!-- 比赛模块 -->
-            <view wx:if="{{sceneIndex==1}}">
+            <view wx:if="{{scene_ind==1}}">
                 <!-- 报名上限 -->
                 <view class="weui-cell weui-cell_input">
                     <view class="weui-cell__hd">
                         <view class="weui-label">报名上限</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input confirm-type="next" name="maximum" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
+                        <input confirm-type="next" name="max_mem" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
                     </view>
                 </view>
 
@@ -75,7 +75,7 @@
                         <view class="weui-label">活动名称</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input name="title" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：客场挑战皇家马德里" />
+                        <input name="act_name" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：客场挑战皇家马德里" />
                     </view>
                 </view>
 
@@ -85,7 +85,7 @@
                         <view class="weui-label">活动费用</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input type="digit" name="amount" confirm-type="next" class="weui-input" placeholder="例如：9块9" />
+                        <input type="digit" name="fee" confirm-type="next" class="weui-input" placeholder="例如：9块9" />
                     </view>
                 </view>
 
@@ -100,14 +100,14 @@
 
 
             <!-- 团建模块 -->
-            <view wx:if="{{sceneIndex==2}}">
+            <view wx:if="{{scene_ind==2}}">
                 <!-- 报名上限 -->
                 <view class="weui-cell weui-cell_input">
                     <view class="weui-cell__hd">
                         <view class="weui-label">报名上限</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input confirm-type="next" name="maximum" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
+                        <input confirm-type="next" name="max_mem" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
                     </view>
                 </view>
 
@@ -117,7 +117,7 @@
                         <view class="weui-label">活动名称</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input name="title" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：铁锅炖" />
+                        <input name="act_name" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：铁锅炖" />
                     </view>
                 </view>
 
@@ -127,7 +127,7 @@
                         <view class="weui-label">活动费用</view>
                     </view>
                     <view class="weui-cell__bd">
-                        <input type="digit" name="amount" confirm-type="next" class="weui-input" placeholder="例如：9.9" />
+                        <input type="digit" name="fee" confirm-type="next" class="weui-input" placeholder="例如：9.9" />
                     </view>
                 </view>
 

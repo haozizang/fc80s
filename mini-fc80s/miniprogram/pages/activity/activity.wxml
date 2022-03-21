@@ -11,7 +11,7 @@
                 </view>
             </view>
             <view class="ui-post">
-                <navigator url="/pages/post/post" wx:if="{{p_is_}}">
+                <navigator url="/pages/post/post" wx:if="{{p_is_ready}}">
                     <button class="weui-btn" type="primary" size="mini">发起活动</button>
                 </navigator>
                 <button class="weui-btn" type="primary" size="mini" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo" wx:else>发起活动</button>
