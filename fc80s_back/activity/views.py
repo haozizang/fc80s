@@ -20,7 +20,9 @@ def createActivity(request):
         act_time = act_time,
         defaults={
             'act_name': body["act_name"],
-            'creator_open_id': body["open_id"]
+            'creator_open_id': body["open_id"],
+            'max_num': body["max_num"],
+            'act_time': act_time,
         }
     )
 

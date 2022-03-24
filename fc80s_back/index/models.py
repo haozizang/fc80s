@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 import enum
 
 class ActType(enum.Enum):
@@ -33,13 +34,16 @@ class Player(models.Model):
 class Activity(models.Model):
     act_name = models.CharField(max_length=20)
     act_type = models.CharField(
+        # blank + default 两项 => non-nullable CharFiled,值必须被传入
+        blank=False,
+        default=None,
         max_length=20,
-        choices=[(ele, ele.value) for ele in ActType]
+        choices=[(ele, ele.value) for ele in ActType],
     )
     act_content = models.CharField(max_length=30, null=True)
     act_time = models.DateTimeField()
     creator_open_id = models.CharField(max_length=50, null=True)
-    create_time = models.DateTimeField()
+    create_time = models.DateTimeField(default = timezone.now)
     max_num = models.IntegerField()
 
     def __str__(self):
