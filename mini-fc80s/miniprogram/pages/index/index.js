@@ -21,8 +21,8 @@ Page({
         p_openid: '',
         // business data
         p_user_profile: {
-            activities: 0,
-            matches: 0,
+            activities: NaN,
+            matches: NaN,
             ability_array: [["稳定", 0], ["防守", 0], ["热情", 0], ["荣誉", 0], ["进攻", 0], ["胜率", 0]],
         }
     },
@@ -39,12 +39,13 @@ Page({
             p_is_ready: c_is_ready,
         })
         var c_user_info = wx.getStorageSync("c_user_info");
-        if (c_user_info == true) {
+        console.log('user_info', c_user_info)
+        if (c_user_info) {
+            console.log('inside')
             this.setData({
                 p_user_info: c_user_info,
             })
         }
-        // console.log('user_info', c_user_info)
         var c_openid = wx.getStorageSync("c_openid");
         if (c_openid) {
             this.setData({
@@ -55,7 +56,7 @@ Page({
             this.getOpenId();
         }
         var c_user_profile = wx.getStorageSync("c_user_profile");
-        console.log(`activities: ${c_user_profile.activities}, ${c_user_profile.matches}`)
+        console.log(`c_user_profile: ${c_user_profile}, activities: ${c_user_profile.activities}, matches: ${c_user_profile.matches}`)
         if (c_user_profile) {
             this.setData({
                 p_user_profile: c_user_profile,
