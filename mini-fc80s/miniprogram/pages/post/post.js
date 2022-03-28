@@ -1,5 +1,5 @@
-
 const app = getApp();
+var utils = require('../utils.js');
 
 Page({
     data: {
@@ -15,13 +15,25 @@ Page({
         scene_ind: 0,
         // 上传文件-文件列表
         files: [],
-        fileID: ''
+        fileID: '',
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
+        var display_dt = new Date();
+        // 默认展示一个小时以后的时间
+        display_dt.setHours(display_dt.getHours() + 1)
+        var display_date = utils.formatDate(display_dt)
+        var display_time = utils.formatTime(display_dt)
+        const act_dt = display_dt.getTime()
+        this.setData({
+            act_date: display_date,
+            act_time: display_time,
+            act_dt: act_dt
+        })
+
         // 当前版本不支持小程序云函数
         if (!wx.cloud) {
             wx.showModal({
@@ -178,7 +190,8 @@ Page({
                 max_num: data.max_mem,
                 act_name: data.act_name,
                 content: that.data.content,
-                act_time: new Date().getTime(),
+                act_date: that.data.act_date,
+                act_time: that.data.act_time,
             },
             success: function (res) {
                 console.log("res:", res)
@@ -230,5 +243,25 @@ Page({
         });
 
         // console.log(this.data.userInfo);
+    },
+
+    bindDateChange: function(res){
+        console.log(res);
+        const date_str = res.detail.value + " " + this.data.act_time
+        const act_dt = Date.parse(date_str)
+        this.setData({
+            act_date: res.detail.value,
+            act_dt: act_dt
+        })
+    },
+
+    bindTimeChange: function(res){
+        console.log(res);
+        const date_str = this.data.act_date + " " + res.detail.value
+        const act_dt = Date.parse(date_str)
+        this.setData({
+            act_time: res.detail.value,
+            act_dt: act_dt
+        })
     },
 })

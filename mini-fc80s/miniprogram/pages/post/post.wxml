@@ -17,16 +17,6 @@
 
             <!-- 练习赛模块 -->
             <view wx:if="{{scene_ind==0}}">
-                <!-- 报名上限 -->
-                <view class="weui-cell weui-cell_input">
-                    <view class="weui-cell__hd">
-                        <view class="weui-label">报名上限</view>
-                    </view>
-                    <view class="weui-cell__bd">
-                        <input confirm-type="next" name="max_mem" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
-                    </view>
-                </view>
-
                 <!-- 活动名称 -->
                 <view class="weui-cell weui-cell_input">
                     <view class="weui-cell__hd">
@@ -34,6 +24,29 @@
                     </view>
                     <view class="weui-cell__bd">
                         <input name="act_name" confirm-type="next" maxlength="12" class="weui-input" placeholder="例如：队内红蓝大战" />
+                    </view>
+                </view>
+
+                <!-- 活动日期 -->
+                <view class="weui-cell weui-cell_input">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">活动时间</view>
+                    </view>
+                    <picker class="weui-btn" mode="date" value="{{date}}" start="{{cur_time}}" bindchange="bindDateChange">
+                        <input name="select_date" confirm-type="next" maxlength="12" class="weui-input" placeholder="{{act_date}}"/>
+                    </picker>
+                    <picker class="weui-btn" mode="time" value="{{time}}" bindchange="bindTimeChange" placeholder="select date">
+                        <input name="select_time" confirm-type="next" maxlength="12" class="weui-input" placeholder="{{act_time}}"/>
+                    </picker>
+                </view>
+
+                <!-- 报名上限 -->
+                <view class="weui-cell weui-cell_input">
+                    <view class="weui-cell__hd">
+                        <view class="weui-label">报名上限</view>
+                    </view>
+                    <view class="weui-cell__bd">
+                        <input confirm-type="next" name="max_mem" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
                     </view>
                 </view>
 
