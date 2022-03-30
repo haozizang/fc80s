@@ -14,17 +14,21 @@ def createActivity(request):
     print("body", body_str)
     time_zone = datetime.utcnow().astimezone().tzinfo
     print(time_zone)
-    act_time = datetime.fromtimestamp(float(body["act_time"])/1000, time_zone)
+    # 相同活动时间一个人无法创建多个活动
+    act_time = datetime.fromtimestamp(float(body["act_dt"])/1000, time_zone)
     activity, if_created = Activity.objects.get_or_create(
         creator_open_id=body["open_id"],
         act_time = act_time,
         defaults={
+            'act_type': body["act_ind"],
             'act_name': body["act_name"],
+            'act_fee': body["act_fee"],
             'creator_open_id': body["open_id"],
             'max_num': body["max_num"],
             'act_time': act_time,
         }
     )
+    print(f"DBG: if_created: {if_created}")
 
     resp = {
         'code': 0,

@@ -40,6 +40,7 @@ class Activity(models.Model):
         max_length=20,
         choices=[(ele, ele.value) for ele in ActType],
     )
+    act_fee = models.FloatField(default = 0)
     act_content = models.CharField(max_length=30, null=True)
     act_time = models.DateTimeField()
     creator_open_id = models.CharField(max_length=50, null=True)
