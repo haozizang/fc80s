@@ -10,12 +10,12 @@ Page({
         // 内容大小限制为200字符
         contentSize: 0,
         // 活动集合
-        scenes: ["练习赛", "比赛", "团建"],
-        // 默认的活动
-        scene_ind: 0,
+        act_types: ["练习赛", "比赛", "团建"],
+        // 选择的活动
+        act_ind: 0,
         // 上传文件-文件列表
         files: [],
-        fileID: '',
+        // fileID: '',
     },
 
     /**
@@ -109,8 +109,8 @@ Page({
     bindSceneChange: function(e) {
         // console.log('Scenes:', e.detail.value);
         this.setData({
-            scene_ind: e.detail.value,
-            fileID: ''
+            act_ind: e.detail.value,
+            // fileID: ''
         })
     },
     
@@ -131,7 +131,7 @@ Page({
         // 解决textarea组件在表单提交时无法获取内容的BUG
         data.content = this.data.content;
         // 图片
-        data['fileID'] = this.data.fileID;
+        // data['fileID'] = this.data.fileID;
         // 增加用户信息
         data['nickName'] = userInfo.nickName;
         data['avatarUrl'] = userInfo.avatarUrl;
@@ -149,12 +149,12 @@ Page({
         }
         if(!data['act_name']) {
             wx.showToast({
-                title: data['scene_ind'] == 0 ? '请输入比赛主题' : '请输入活动名称',
+                title: data['act_ind'] == 0 ? '请输入比赛主题' : '请输入活动名称',
                 icon: 'none'
             });
             return;
         }
-        if (parseInt(data['scene_ind']) === 1 && !data['fee']) {
+        if (parseInt(data['act_ind']) === 1 && !data['fee']) {
             wx.showToast({
                 title: '请输入活动费用',
                 icon: 'none'
@@ -163,7 +163,7 @@ Page({
         }
         if (!data['content']) {
             wx.showToast({
-                title: data['scene_ind'] == 0 ? '请输入比赛内容' : '请输入活动描述',
+                title: data['act_ind'] == 0 ? '请输入比赛内容' : '请输入活动描述',
                 icon: 'none'
             });
             return;
@@ -186,12 +186,11 @@ Page({
             method: "POST",
             data: {
                 open_id: app.globalData.g_openid,
-                scene_ind: data.scene_ind,
+                act_ind: data.act_ind,
                 max_num: data.max_mem,
                 act_name: data.act_name,
                 content: that.data.content,
-                act_date: that.data.act_date,
-                act_time: that.data.act_time,
+                act_dt: that.data.act_dt
             },
             success: function (res) {
                 console.log("res:", res)
