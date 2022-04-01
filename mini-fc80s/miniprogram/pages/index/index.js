@@ -56,7 +56,7 @@ Page({
             this.getOpenId();
         }
         var c_user_profile = wx.getStorageSync("c_user_profile");
-        console.log(`c_user_profile: ${c_user_profile}, activities: ${c_user_profile.activities}, matches: ${c_user_profile.matches}`)
+        console.log("c_user_profile", c_user_profile)
         if (c_user_profile) {
             this.setData({
                 p_user_profile: c_user_profile,
