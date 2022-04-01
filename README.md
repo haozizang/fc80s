@@ -14,3 +14,6 @@
     - create a date-specified log file:
         - touch $(date "+%F").md
 
+# 参考项目
+- 接龙小程序:
+    - https://github.com/eyson/wechat-solita.git
