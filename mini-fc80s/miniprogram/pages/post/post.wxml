@@ -73,7 +73,7 @@
                     <view class="weui-label">报名上限</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <input confirm-type="next" name="max_mem" type="number" max="20" min="1" class="weui-input" placeholder="最大上限20" value="20" />
+                    <input name="max_mem" type="number" confirm-type="next" max="1000" min="1" class="weui-input" placeholder="最大上限200" value="20" />
                 </view>
             </view>
 
@@ -83,7 +83,7 @@
                     <view class="weui-label">活动费用</view>
                 </view>
                 <view class="weui-cell__bd">
-                    <input type="digit" name="fee" confirm-type="next" class="weui-input" placeholder="例如：9块9" />
+                    <input type="number" name="act_fee" confirm-type="next" class="weui-input" value="0" />
                 </view>
             </view>
 

@@ -1,8 +1,12 @@
 const app = getApp();
 var utils = require('../utils.js');
+const MAX_NUM = 1500
+const MIN_NUM = 1
 
 Page({
     data: {
+        // 报名人数上限
+        max_num: MAX_NUM,
         // 解决textarea组件在表单提交时无法获取内容的BUG
         content: '',
         // 保存用户信息
@@ -18,9 +22,7 @@ Page({
         // fileID: '',
     },
 
-    /**
-     * 生命周期函数--监听页面加载
-     */
+    // 生命周期函数--监听页面加载
     onLoad: function(options) {
         var display_dt = new Date();
         // 默认展示一个小时以后的时间
@@ -52,55 +54,6 @@ Page({
             lang: 'zh_CN',
             success: this.getUserInfoSuccess
         });
-    },
-
-    /**
-     * 生命周期函数--监听页面初次渲染完成
-     */
-    onReady: function() {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面显示
-     */
-    onShow: function() {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面隐藏
-     */
-    onHide: function() {
-
-    },
-
-    /**
-     * 生命周期函数--监听页面卸载
-     */
-    onUnload: function() {
-
-    },
-
-    /**
-     * 页面相关事件处理函数--监听用户下拉动作
-     */
-    onPullDownRefresh: function() {
-
-    },
-
-    /**
-     * 页面上拉触底事件的处理函数
-     */
-    onReachBottom: function() {
-
-    },
-
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function() {
-
     },
 
     /**
@@ -140,9 +93,32 @@ Page({
         data['gender'] = userInfo['gender'];
         data['language'] = userInfo['language'];
         // 检验表单数据
-        if (data['max_mem'] < 0 || data['max_mem'] > 1000){
+        var max_mem = parseFloat(data['max_mem'])
+        var act_fee = parseFloat(data['act_fee'])
+        if (isNaN(act_fee)){
             wx.showToast({
-                title: '超出报名上限（1~1000）',
+                title: `活动费用必须是数字`,
+                icon: 'none'
+            });
+            return;
+        }
+        if (isNaN(max_mem)){
+            wx.showToast({
+                title: `报名上限必须是数字`,
+                icon: 'none'
+            });
+            return;
+        }
+        if (!Number.isInteger(parseFloat(max_mem))){
+            wx.showToast({
+                title: `报名上限必须是整数`,
+                icon: 'none'
+            });
+            return;
+        }
+        if (max_mem < 0 || max_mem > 1000){
+            wx.showToast({
+                title: `超出报名上限(${MIN_NUM}~${MAX_NUM})`,
                 icon: 'none'
             });
             return;
@@ -154,7 +130,7 @@ Page({
             });
             return;
         }
-        if (parseInt(data['act_ind']) === 1 && !data['fee']) {
+        if (parseInt(data['act_ind']) === 1 && !act_fee) {
             wx.showToast({
                 title: '请输入活动费用',
                 icon: 'none'
@@ -187,9 +163,10 @@ Page({
             data: {
                 open_id: app.globalData.g_openid,
                 act_ind: data.act_ind,
-                max_num: data.max_mem,
+                max_num: max_mem,
+                act_fee: act_fee,
                 act_name: data.act_name,
-                content: that.data.content,
+                content: data.content,
                 act_dt: that.data.act_dt
             },
             success: function (res) {
@@ -219,9 +196,7 @@ Page({
         })
     },
 
-    /**
-     * 计算内容长度
-     */
+    // 计算内容长度
     bindInput: function(e){
         let v = e.detail ? e.detail.value : '';
         this.setData({
@@ -231,9 +206,7 @@ Page({
         // console.log(e);
     },
 
-    /**
-     * 获取用户信息
-     */
+    // 获取用户信息
     getUserInfoSuccess: function(res){
         const userInfo = res.userInfo || {};
         // console.log(userInfo);
@@ -262,5 +235,47 @@ Page({
             act_time: res.detail.value,
             act_dt: act_dt
         })
+    },
+
+
+//////////////////////////// 未用到的函数
+
+    // 生命周期函数--监听页面初次渲染完成
+    onReady: function() {
+
+    },
+
+    // 生命周期函数--监听页面显示
+    onShow: function() {
+
+    },
+
+    // 生命周期函数--监听页面隐藏
+    onHide: function() {
+
+    },
+
+    // 生命周期函数--监听页面卸载
+    onUnload: function() {
+
+    },
+
+    // 页面相关事件处理函数--监听用户下拉动作
+    onPullDownRefresh: function() {
+
+    },
+
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom: function() {
+
+    },
+
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage: function() {
+
     },
 })
