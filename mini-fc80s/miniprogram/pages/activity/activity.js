@@ -52,10 +52,10 @@ Page({
                 nick_name: that.data.p_user_info.nickName
             },
             success: function (res) {
+                console.log("res: ", res)
                 that.setData({
                     tst_act_list: res.data.activities,
                 })
-                console("acts: ", activities)
             }
             ,fail: function (res) {
                 // 请求失败弹出提示框 popup

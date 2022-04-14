@@ -40,7 +40,7 @@
     "ignoreUploadUnusedFiles": true
   },
   "appid": "wx80f567980bd1bd6c",
-  "projectname": "fc80s-mini",
+  "projectname": "mini-fc80s",
   "libVersion": "2.7.0",
   "simulatorType": "wechat",
   "simulatorPluginLibVersion": {},
