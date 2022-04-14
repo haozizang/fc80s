@@ -30,13 +30,42 @@ Page({
         })
         var c_user_info = wx.getStorageSync("c_user_info");
         console.log('user_info', c_user_info)
-        if (c_user_info) {
-            this.setData({
-                p_user_info: c_user_info,
-            })
-        } else {
-            console.warn("[activity.js] can't get user_info from local cache!")
+        if (!c_user_info) {
+            wx.showToast({
+                title: `无法获取user_info`,
+                icon: 'none'
+            });
+            return
         }
+        this.setData({
+            p_user_info: c_user_info,
+        })
+
+        var that = this;
+        // TODO 直接从后端加载活动(放缓存若别人更新则无法显示新添加的活动)
+        wx.request({
+            url: 'http://127.0.0.1:8000/activity/get_team_acts/',
+            header: { "content-type": "application/json" },
+            method: "POST",
+            data: {
+                open_id: that.data.p_openid,
+                nick_name: that.data.p_user_info.nickName
+            },
+            success: function (res) {
+                that.setData({
+                    tst_act_list: res.data.activities,
+                })
+                console("acts: ", activities)
+            }
+            ,fail: function (res) {
+                // 请求失败弹出提示框 popup
+                wx.showModal({
+                    title: '错误',
+                    content: "请求活动数据失败"
+                });
+            }
+        })
+        // TODO 提供下拉加载活动功能
     },
 
     // onShow 每次页面切换时调用
