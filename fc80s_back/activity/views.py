@@ -7,7 +7,7 @@ from datetime import datetime
 from index.models import Activity, Player, Match, Team
 
 
-def createActivity(request):
+def create(request):
     body_str = str(request.body, encoding = "utf8")
     body_unicode = request.body.decode("utf-8")
     body = json.loads(body_unicode)
@@ -29,6 +29,18 @@ def createActivity(request):
         }
     )
     print(f"DBG: if_created: {if_created}")
+    if if_created:
+        resp = {'code': 0, 'msg': ""}
+    else:
+        resp = {'code': 1, 'msg': "failed to create a new activity"}
+    return HttpResponse(json.dumps(resp), content_type="application/json")
+
+# 获取特定用户的球队的全部活动
+def getTeamActs(request):
+    body_str = str(request.body, encoding = "utf8")
+    body_unicode = request.body.decode("utf-8")
+    body = json.loads(body_unicode)
+    print("body", body_str)
 
     resp = {
         'code': 0,
