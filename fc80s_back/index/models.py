@@ -46,6 +46,7 @@ class Activity(models.Model):
     creator_open_id = models.CharField(max_length=50, null=True)
     create_time = models.DateTimeField(default = timezone.now)
     max_num = models.IntegerField()
+    club = models.ForeignKey(Club, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         #return self.create_time.strftime("%Y-%m-%d %H:%M:%S")

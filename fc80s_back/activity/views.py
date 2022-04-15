@@ -42,6 +42,19 @@ def getTeamActs(request):
     body = json.loads(body_unicode)
     print("body", body_str)
 
+    team_acts = Activity.objects.filter(club=player.club)
+    activity, if_created = Activity.objects.get_or_create(
+        creator_open_id=body["open_id"],
+        act_time = act_time,
+        defaults={
+            'act_type': body["act_ind"],
+            'act_name': body["act_name"],
+            'act_fee': body["act_fee"],
+            'creator_open_id': body["open_id"],
+            'max_num': body["max_num"],
+            'act_time': act_time,
+        }
+    )
     resp = {
         'code': 0,
         'msg': 0,
