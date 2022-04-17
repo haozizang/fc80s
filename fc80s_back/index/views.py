@@ -4,7 +4,14 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 from django.db.models import Q
 
+from . import models
 from index.models import Club, Player, Match, Team
+
+def create_club(name):
+    # create clubs for DBG
+    club = models.Club(name=name)
+    club.save()
+    return club
 
 def index(request):
     # turn hex kanji into string
@@ -14,17 +21,25 @@ def index(request):
     print("body", body_str)
     print("path", request.path)
     print("Method", request.method)
+    if not body['open_id']:
+        return HttpResponse(json.dumps({'code': 1, 'msg': "open_id empty!"}),
+            content_type="application/json")
     # get or create the player for the sender
     player, if_created = Player.objects.get_or_create(open_id=body["open_id"], defaults={'name': body["nick_name"], 'open_id': body["open_id"]})
-    print("player.name: ", player.name)
+    club = create_club('fc80s')
+    player.club = club
+    print("player: ", player)
     print("if created: ", if_created)
     match_num = 0
     team_num = 0
+    club_name = None
     if not if_created:
         # get club the player belongs
-        club = Club.objects.filter(name=player.name)
+        club = player.club
+        # club = Club.objects.filter(name=player.name)
+        print("club.name: ", club)
         if club:
-            print("player", player.name, "belongs to club: ", club.name)
+            club_name = club.name
         # not new user => check team and match
         # get all the team(activity) the sender get involved
         team_list = Team.objects.filter(players__open_id=body["open_id"])
@@ -41,6 +56,7 @@ def index(request):
             print("match count: ", match_num)
         print("team num(activity num): ", team_list.count())
     resp = {
+        'club': club_name,
         'activities': team_num,
         'matches': match_num,
         'offence': player.offence,
