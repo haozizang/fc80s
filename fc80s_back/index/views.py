@@ -28,6 +28,7 @@ def index(request):
     player, if_created = Player.objects.get_or_create(open_id=body["open_id"], defaults={'name': body["nick_name"], 'open_id': body["open_id"]})
     club = create_club('fc80s')
     player.club = club
+    player.save()
     print("player: ", player)
     print("if created: ", if_created)
     match_num = 0
@@ -64,7 +65,7 @@ def index(request):
         'stability': player.stability,
         'teamwork': player.teamwork,
         'passion': player.passion,
-        'win_ratio': player.win_ratio
+        'win_ratio': player.win_ratio,
     }
     # return render(request, "index/index.html", context)
     return HttpResponse(json.dumps(resp), content_type="application/json")

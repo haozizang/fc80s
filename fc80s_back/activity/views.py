@@ -4,7 +4,7 @@ from django.http import HttpResponse, Http404
 from django.template import loader
 from datetime import datetime
 
-from index.models import Activity, Player, Match, Team
+from index.models import Club, Activity, Player, Match, Team
 
 
 def create(request):
@@ -16,6 +16,9 @@ def create(request):
     print(time_zone)
     # 相同活动时间一个人无法创建多个活动
     act_time = datetime.fromtimestamp(float(body["act_dt"])/1000, time_zone)
+    club = Club.objects.get(name=body['club'])
+    if not club:
+        return HttpResponse(json.dumps({'code': 1, 'msg': "failed to find the club"}), content_type="application/json")
     activity, if_created = Activity.objects.get_or_create(
         creator_open_id=body["open_id"],
         act_time = act_time,
@@ -30,31 +33,22 @@ def create(request):
     )
     print(f"DBG: if_created: {if_created}")
     if if_created:
+        activity.club = club
+        activity.save()
         resp = {'code': 0, 'msg': ""}
     else:
         resp = {'code': 1, 'msg': "failed to create a new activity"}
     return HttpResponse(json.dumps(resp), content_type="application/json")
 
 # 获取特定用户的球队的全部活动
-def getTeamActs(request):
+def get_team_acts(request):
     body_str = str(request.body, encoding = "utf8")
     body_unicode = request.body.decode("utf-8")
     body = json.loads(body_unicode)
     print("body", body_str)
 
-    team_acts = Activity.objects.filter(club=player.club)
-    activity, if_created = Activity.objects.get_or_create(
-        creator_open_id=body["open_id"],
-        act_time = act_time,
-        defaults={
-            'act_type': body["act_ind"],
-            'act_name': body["act_name"],
-            'act_fee': body["act_fee"],
-            'creator_open_id': body["open_id"],
-            'max_num': body["max_num"],
-            'act_time': act_time,
-        }
-    )
+    team_acts = Activity.objects.filter(club_id=body['club'])
+    print('DBG team_acts: ', team_acts)
     resp = {
         'code': 0,
         'msg': 0,
