@@ -4,3 +4,4 @@ $ sqlite3 db.sqlite
 > .header on
 > select * from index_activity
 
+sqlite3 db.sqlite3 -cmd ".header on" "select * from index_player"
