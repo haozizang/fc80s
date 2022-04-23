@@ -16,17 +16,19 @@ def create(request):
     print(time_zone)
     # 相同活动时间一个人无法创建多个活动
     act_time = datetime.fromtimestamp(float(body["act_dt"])/1000, time_zone)
-    club = Club.objects.get(name=body['club'])
+    # 根据open_id 找到创建人
+    creator = Player.objects.get(open_id=body['open_id'])
+    # 根据创建人找到club
+    club = creator.club
     if not club:
         return HttpResponse(json.dumps({'code': 1, 'msg': "failed to find the club"}), content_type="application/json")
     activity, if_created = Activity.objects.get_or_create(
-        creator_open_id=body["open_id"],
+        creator=creator,
         act_time = act_time,
         defaults={
             'act_type': body["act_ind"],
             'act_name': body["act_name"],
             'act_fee': body["act_fee"],
-            'creator_open_id': body["open_id"],
             'max_num': body["max_num"],
             'act_time': act_time,
         }
@@ -47,10 +49,23 @@ def get_team_acts(request):
     body = json.loads(body_unicode)
     print("body", body_str)
 
-    team_acts = Activity.objects.filter(club_id=body['club'])
-    print('DBG team_acts: ', team_acts)
+    team_acts = Activity.objects.filter(club_id=body['club']).order_by('act_time')
+    act_list = []
+    for act in team_acts:
+        creator = act.creator
+        act_list.append({
+            'act_name': act.act_name,
+            'act_type': act.act_type,
+            'max_num': act.max_num,
+            'act_ts': act.act_time.timestamp() * 1000,
+            'act_content': act.act_content,
+            'creator_name': creator.name,
+            'creator_avatar_url': creator.avatar_url,
+        })
     resp = {
         'code': 0,
         'msg': 0,
+        'team_acts': act_list,
+        'act_list': act_list,
     }
     return HttpResponse(json.dumps(resp), content_type="application/json")

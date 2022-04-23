@@ -25,7 +25,9 @@ def index(request):
         return HttpResponse(json.dumps({'code': 1, 'msg': "open_id empty!"}),
             content_type="application/json")
     # get or create the player for the sender
-    player, if_created = Player.objects.get_or_create(open_id=body["open_id"], defaults={'name': body["nick_name"], 'open_id': body["open_id"]})
+    player, if_created = Player.objects.get_or_create(open_id=body["open_id"],
+        defaults={'name': body["nick_name"], 'open_id': body["open_id"],
+        'avatar_url': body["avatar_url"]})
     club = create_club('fc80s')
     player.club = club
     player.save()
