@@ -30,7 +30,7 @@ def upload(request):
     time = datetime.fromtimestamp(float(activity_timestamp)/1000, time_zone)
     print("backend time:", time)
     # TODO: 应用新的 Activity 模型
-    activity, if_created = Activity.objects.get_or_create(time = time)
+    activity, if_created = Activity.objects.get_or_create(act_time = time)
     print("if_created: ", if_created)
     # when activity is not created, don't insert the teams neither
     if if_created:

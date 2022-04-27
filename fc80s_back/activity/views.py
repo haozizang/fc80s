@@ -37,7 +37,18 @@ def create(request):
     if if_created:
         activity.club = club
         activity.save()
-        resp = {'code': 0, 'msg': ""}
+        resp = {
+            'code': 0,
+            'msg': "",
+            'act_name': activity.act_name,
+            'act_type': activity.act_type,
+            'creator_name': creator.name,
+            'creator_avatar_url': creator.avatar_url,
+            'max_num': activity.max_num,
+            'act_ts': activity.act_time.timestamp() * 1000,
+            'act_content': activity.act_content,
+
+        }
     else:
         resp = {'code': 1, 'msg': "failed to create a new activity"}
     return HttpResponse(json.dumps(resp), content_type="application/json")
