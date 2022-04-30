@@ -1,10 +1,8 @@
-from django.shortcuts import render
 import json
-from django.http import HttpResponse, Http404
-from django.template import loader
+from django.http import HttpResponse
 from datetime import datetime
 
-from index.models import Club, Activity, Player, Match, Team
+from index.models import Activity, Player
 
 
 def create(request):
