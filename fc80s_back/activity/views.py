@@ -74,7 +74,6 @@ def get_team_acts(request):
     resp = {
         'code': 0,
         'msg': 0,
-        'team_acts': act_list,
         'act_list': act_list,
     }
     return HttpResponse(json.dumps(resp), content_type="application/json")
