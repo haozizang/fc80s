@@ -58,7 +58,8 @@ def get_team_acts(request):
     body = json.loads(body_unicode)
     print("body", body_str)
 
-    team_acts = Activity.objects.filter(club_id=body['club']).order_by('act_time')
+    cur_dt = datetime.now()
+    team_acts = Activity.objects.filter(club_id=body['club']).filter(act_time__gt=cur_dt).order_by('act_time')
     act_list = []
     for act in team_acts:
         creator = act.creator
